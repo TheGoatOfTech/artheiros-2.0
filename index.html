@@ -1,603 +1,801 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ARTHEIROS — Galeria de Arte Autoral</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com/3.4.17"></script>
-<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galeria Curatorial Amanda Costa — Arte autoral e independente</title>
+<meta name="description" content="Galeria curatorial de arte autoral e independente, com seleção de Amanda Costa.">
+<meta name="theme-color" content="#14241E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314241E'/%3E%3Ctext x='32' y='42' font-size='30' text-anchor='middle' fill='%23B8924A' font-family='serif' font-style='italic'%3EAC%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Dados da galeria -->
+<script src="./config.js"></script>
+
 <style>
-:root{
-  color-scheme:dark;
-  --wood-dark:#140D09;
-  --wood-mid:#1D130E;
-  --moss:#1F2418;
-  --cream:#F5EFE6;
-  --gold:#C5A880;
-  --gold-hair:rgba(197,168,128,.28);
-  --wine:#6B241B;
-  --olive:#555436;
-  --ink:#0F0A07;
-  --ease:cubic-bezier(.22,1,.36,1);
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px)
-}
-html{scroll-behavior:smooth;scroll-padding-top:90px;-webkit-text-size-adjust:100%}
-body{
-  margin:0;
-  background-color:var(--wood-dark);
-  color:var(--cream);
-  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
-  letter-spacing:.005em;
-  -webkit-font-smoothing:antialiased;
-  background-image:
-    radial-gradient(ellipse 85% 45% at 50% 0%, rgba(214,178,128,.16) 0%, transparent 70%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.016) 0, rgba(255,255,255,.016) 1px, transparent 1px, transparent 56px),
-    linear-gradient(180deg,#1D130E 0%,#140D09 50%,#1A110C 100%);
-  overflow-x:hidden
-}
-/* vinheta de parede + grão sutil sobre toda a página */
-body::after{
-  content:"";position:fixed;inset:0;z-index:90;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(6,3,2,.38) 100%);
-}
-.serif{font-family:'Cormorant Garamond',Georgia,serif;letter-spacing:-.01em;font-feature-settings:"liga","dlig"}
-h1.serif,h2.serif{font-weight:400;text-wrap:balance}
-h1.serif i,h2.serif i{font-weight:400}
-.eyebrow{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.9rem}
-.eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+  :root{
+    --verde:#14241E; --papel:#F5F2EB; --carvao:#121312;
+    --ouro:#B8924A;  --terra:#8C3B2B;
+    --tclaro:#F5F2EB; --tescuro:#181A18;
+  }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ background:var(--papel); color:var(--tescuro); font-family:'Plus Jakarta Sans',system-ui,sans-serif; overflow-x:hidden; }
+  section[id]{ scroll-margin-top:90px; }
+  .serif{ font-family:'Cormorant Garamond',Georgia,serif; }
+  .mono{ font-family:'Space Mono',ui-monospace,monospace; }
+  .serif em{ color:var(--ouro); font-style:italic; font-weight:600; }
+  .on-light .serif em{ color:var(--terra); }
 
-/* Botões de museu */
-.btn{
-  position:relative;
-  padding:.9rem 1.5rem;
-  font-size:.7rem;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  font-weight:600;
-  border:1px solid rgba(197,168,128,.7);
-  background:linear-gradient(180deg,rgba(38,26,19,.78),rgba(20,13,9,.78));
-  color:var(--cream);
-  backdrop-filter:blur(4px);
-  cursor:pointer;
-  box-shadow:inset 0 1px 0 rgba(255,236,200,.12), 0 6px 14px rgba(0,0,0,.35);
-  transition:transform .45s var(--ease),background .45s,box-shadow .45s,border-color .45s,color .45s
-}
-.btn::after{content:"";position:absolute;inset:3px;border:1px solid rgba(197,168,128,.16);pointer-events:none;transition:border-color .45s}
-.btn:hover{transform:translateY(-2px);background:linear-gradient(180deg,rgba(197,168,128,.26),rgba(197,168,128,.12));border-color:var(--gold);box-shadow:inset 0 1px 0 rgba(255,236,200,.2),0 12px 24px rgba(0,0,0,.5)}
-.btn:hover::after{border-color:rgba(197,168,128,.4)}
-.btn:active{transform:translateY(0)}
-.btn:focus-visible,a:focus-visible,button:focus-visible,[role=button]:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
-.b-w{background:linear-gradient(180deg,#7E2D22,#5B1D15);border-color:#A5463A}
-.b-w:hover{background:linear-gradient(180deg,#8F3427,#6B241B);border-color:#C5A880}
-.b-o{background:linear-gradient(180deg,#63623F,#4A492D);border-color:#8A895C}
-.b-o:hover{background:linear-gradient(180deg,#727149,#555436);border-color:#C5A880}
-a.btn{display:inline-flex;align-items:center;justify-content:center;text-align:center}
+  /* utilitários de cor ligados às variáveis da config */
+  .bg-verde{background:var(--verde)} .bg-papel{background:var(--papel)} .bg-carvao{background:var(--carvao)}
+  .bg-ouro{background:var(--ouro)}   .bg-terra{background:var(--terra)}
+  .t-ouro{color:var(--ouro)} .t-claro{color:var(--tclaro)} .t-escuro{color:var(--tescuro)} .t-terra{color:var(--terra)}
+  .b-ouro{border-color:var(--ouro)}
+  .claro-70{color:color-mix(in srgb,var(--tclaro) 72%,transparent)}
+  .escuro-70{color:color-mix(in srgb,var(--tescuro) 72%,transparent)}
 
-/* Header */
-header{
-  position:fixed;top:0;left:0;right:0;z-index:40;
-  padding-top:env(safe-area-inset-top,0px);
-  background:linear-gradient(180deg,rgba(18,11,8,.94),rgba(18,11,8,.8));
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--gold-hair);
-  box-shadow:0 1px 0 rgba(0,0,0,.6),0 10px 30px rgba(0,0,0,.35)
-}
-header nav a{position:relative;padding:.35rem 0}
-header nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
-header nav a:hover::after{transform:scaleX(1)}
+  /* textura de tela */
+  .grain{ /* papel de algodão estático: sem filtro SVG, sem custo por frame */
+    position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.025;
+    background-image:radial-gradient(rgba(0,0,0,.9) .6px,transparent .75px),radial-gradient(rgba(0,0,0,.9) .5px,transparent .65px);
+    background-size:3px 3px,7px 7px; background-position:0 0,1px 2px;
+  }
 
-/* Holofote: feixe difuso em duas camadas + poça de luz na parede */
-.spotlight{position:relative}
-.spotlight::before{
-  content:"";position:absolute;top:-70px;left:50%;transform:translateX(-50%);
-  width:min(420px,120%);height:460px;
-  background:
-    radial-gradient(ellipse 38% 100% at 50% 0%, rgba(255,236,200,.26) 0%, rgba(255,226,180,.08) 55%, transparent 80%),
-    radial-gradient(ellipse 70% 85% at 50% 0%, rgba(214,178,128,.14) 0%, transparent 72%);
-  clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);
-  filter:blur(14px);
-  pointer-events:none;z-index:0;transition:opacity .6s,filter .6s;
-}
-.spotlight::after{
-  content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:150%;height:135%;
-  background:radial-gradient(ellipse at 50% 42%, rgba(255,226,180,.1) 0%, rgba(197,168,128,.04) 45%, transparent 70%);
-  pointer-events:none;z-index:0;
-}
-.slot:hover .spotlight::before{filter:blur(10px) brightness(1.5)}
+  /* moldura + passe-partout */
+  .frame{
+    position:relative; padding:clamp(9px,1.3vw,15px);
+    background:linear-gradient(135deg,#dcbc78 0%,var(--ouro) 26%,#7b5f2e 54%,#caa55e 78%,#8b6f38 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(0,0,0,.45),
+      0 2px 3px rgba(0,0,0,.28), 0 14px 22px -8px rgba(0,0,0,.38), 0 36px 56px -24px rgba(0,0,0,.5);
+  }
+  .frame::after{ /* filete interno da moldura */
+    content:""; position:absolute; inset:clamp(9px,1.3vw,15px); pointer-events:none;
+    box-shadow:0 0 0 1px rgba(0,0,0,.35);
+  }
+  .mat{
+    background:#F5F2EB; padding:clamp(14px,7%,34px);
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.22), inset 0 0 0 1px rgba(0,0,0,.08);
+    background-image:linear-gradient(180deg,rgba(255,255,255,.55),rgba(0,0,0,.03));
+  }
+  .art{
+    position:relative; overflow:hidden; background:#1d2b25;
+    box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.4), inset 0 0 14px rgba(0,0,0,.35);
+  }
+  .art img{ width:100%; height:100%; object-fit:cover; display:block; transform-origin:center; }
+  .art::after{ /* reflexo de vidro */
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 38%,rgba(255,255,255,0) 100%);
+  }
+  .openable{ cursor:zoom-in; }
+  .openable:focus-visible{ outline:2px solid var(--ouro); outline-offset:6px; }
 
-/* Molduras */
-.wall{perspective:1100px}.slot{perspective:1000px}
-.frame{
-  position:relative;z-index:1;
-  --gx:50%;--gy:30%;
-  transform-style:preserve-3d;
-  transition:transform .7s var(--ease), box-shadow .7s;
-  cursor:pointer;
-  box-shadow:
-    0 30px 50px rgba(0,0,0,.72),
-    0 10px 18px rgba(0,0,0,.55),
-    0 0 0 1px rgba(0,0,0,.6),
-    inset 0 0 14px rgba(0,0,0,.65);
-  will-change:transform
-}
-.frame:hover{transition:transform .18s ease-out, box-shadow .7s;box-shadow:0 44px 70px rgba(0,0,0,.8),0 14px 24px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.6),inset 0 0 14px rgba(0,0,0,.65)}
-/* reflexo de vidro/verniz que acompanha o cursor */
-.frame::after{
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:3;opacity:0;
-  background:
-    radial-gradient(circle at var(--gx) var(--gy), rgba(255,246,226,.3) 0%, rgba(255,246,226,.08) 28%, transparent 55%),
-    linear-gradient(115deg, transparent 38%, rgba(255,255,255,.07) 46%, transparent 54%);
-  mix-blend-mode:screen;transition:opacity .5s;
-}
-.frame:hover::after{opacity:1}
-.frame img{display:block;width:100%;height:100%;object-fit:cover;box-shadow:inset 0 0 10px rgba(0,0,0,.55)}
-.f-black{padding:14px;background:linear-gradient(145deg,#2A2622,#0C0A08);border:3px solid #3A322B;outline:1px solid rgba(197,168,128,.5);outline-offset:-10px}
-.f-wood{padding:16px;background:linear-gradient(135deg,#86593A 0%,#4B2E1B 48%,#6E462A 100%);border:3px solid #2E1A0E;outline:1px solid rgba(214,191,163,.45);outline-offset:-11px}
-.f-gallery-white{padding:24px;background:linear-gradient(145deg,#F2EBDF,#E6DDCE);border:8px solid #3B2416;outline:1px solid #C5A880;outline-offset:-16px}
+  /* placa de museu */
+  .plaque{
+    background:linear-gradient(180deg,#e9e3d4,#d8d0bb); color:#181A18;
+    box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 6px 14px rgba(0,0,0,.35);
+    border:1px solid rgba(0,0,0,.25);
+  }
 
-.leap{animation:leap .8s cubic-bezier(.5,0,.2,1) forwards}
-@keyframes leap{40%{transform:translateZ(120px) scale(1.08)}100%{transform:translateZ(280px) rotateY(180deg) scale(1.35);opacity:0}}
-/* destaque da obra ao abrir o modal: surge da parede com foco de luz */
-.pop{animation:pop .9s var(--ease) both}
-@keyframes pop{from{transform:perspective(1200px) translateY(26px) rotateX(8deg) scale(.94);opacity:0;filter:brightness(.6) blur(4px)}to{filter:brightness(1) blur(0)}}
-.overlay{animation:ovl .5s ease both}
-@keyframes ovl{from{opacity:0}}
-.kb{animation:kb 16s ease-in-out infinite alternate}
-@keyframes kb{from{transform:scale(1)}to{transform:scale(1.14) translate(-2%,-1.5%)}}
+  /* spotlight */
+  /* spotlight: uma camada pré-pintada que só se move com transform (compositor, sem repaint) */
+  #spot{ position:absolute; left:0; top:0; width:1100px; height:1100px; margin:-550px 0 0 -550px; pointer-events:none; will-change:transform;
+         background:radial-gradient(circle, rgba(255,206,130,.30) 0%, rgba(255,206,130,.10) 38%, transparent 68%); }
+  .hero-vignette{ background:radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,.45) 100%); }
 
-/* Plaquinha: latão escovado */
-.plaque{
-  opacity:.9;
-  transition:opacity .5s, transform .5s var(--ease);
-  background:
-    repeating-linear-gradient(90deg, rgba(255,236,200,.035) 0 1px, transparent 1px 3px),
-    linear-gradient(180deg,#2B2018 0%,#1A120D 55%,#241A13 100%);
-  border:1px solid rgba(197,168,128,.5);
-  box-shadow:inset 0 1px 0 rgba(255,236,200,.14), inset 0 -1px 0 rgba(0,0,0,.5), 0 12px 22px rgba(0,0,0,.5);
-  position:relative
-}
-.plaque::before{content:"";position:absolute;inset:3px;border:1px solid rgba(197,168,128,.14);pointer-events:none}
-.slot:hover .plaque{opacity:1;transform:translateY(-3px)}
+  /* selo giratório */
+  .seal{ animation:spin 32s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
 
-/* Marquee */
-.marquee-wrap{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 6%,#000 94%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0%,#000 6%,#000 94%,transparent 100%)}
-.marquee-track{display:flex;gap:1.75rem;width:max-content;animation:marqueeLoop 42s linear infinite}
-.marquee-wrap:hover .marquee-track{animation-play-state:paused}
-@keyframes marqueeLoop{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  /* botões */
+  .btn{ display:inline-flex; align-items:center; gap:.6rem; padding:.95rem 1.6rem; border-radius:999px; font-weight:500; font-size:.92rem; letter-spacing:.02em; transition:transform .3s, background .3s, color .3s, box-shadow .3s; cursor:pointer; border:1px solid transparent; }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-ouro{ background:var(--ouro); color:#14241E; box-shadow:0 10px 30px -10px rgba(184,146,74,.7); }
+  .btn-ouro:hover{ background:#cfa95d; }
+  .btn-line-claro{ border-color:color-mix(in srgb,var(--tclaro) 45%,transparent); color:var(--tclaro); }
+  .btn-line-claro:hover{ background:var(--tclaro); color:var(--verde); }
+  .btn-line-escuro{ border-color:color-mix(in srgb,var(--tescuro) 35%,transparent); color:var(--tescuro); }
+  .btn-line-escuro:hover{ background:var(--tescuro); color:var(--papel); }
+  .btn-terra{ background:var(--terra); color:var(--tclaro); }
+  .btn-terra:hover{ background:#a2493a; }
+  .btn:focus-visible, a:focus-visible, button:focus-visible{ outline:2px solid var(--ouro); outline-offset:3px; }
 
-/* CORTINAS DE VELUDO */
-.gallery-stage{position:relative;overflow:hidden}
-.curtain-valance{
-  position:absolute;top:0;left:0;right:0;height:26px;z-index:26;pointer-events:none;
-  background:
-    repeating-linear-gradient(90deg,rgba(0,0,0,.28) 0 14px,rgba(165,58,46,.18) 14px 28px),
-    linear-gradient(180deg,#5A1B13 0%,#2B0B08 100%);
-  border-bottom:2px solid rgba(197,168,128,.6);
-  box-shadow:0 10px 24px rgba(0,0,0,.7)
-}
-.curtain-panel{
-  position:absolute;top:0;bottom:0;width:51%;z-index:20;will-change:transform;
-  background:
-    repeating-linear-gradient(90deg, rgba(10,2,2,.6) 0px, rgba(120,34,26,.3) 14px, rgba(190,72,58,.2) 30px, rgba(120,34,26,.3) 46px, rgba(10,2,2,.62) 64px),
-    linear-gradient(180deg, rgba(255,200,170,.1) 0%, transparent 18%, transparent 80%, rgba(0,0,0,.4) 100%),
-    linear-gradient(180deg,#651E16 0%,#44120C 55%,#2D0B07 100%);
-  transition:transform 2.3s cubic-bezier(.65,0,.2,1), filter 2.3s ease;
-}
-/* sombra projetada sobre o salão pela borda interna da cortina */
-.curtain-panel::after{
-  content:"";position:absolute;top:0;bottom:0;width:150px;pointer-events:none;opacity:1;transition:opacity 1.6s ease .3s;
-}
-.curtain-left{left:0;transform-origin:left center;border-right:2px solid rgba(197,168,128,.5);box-shadow:10px 0 34px rgba(0,0,0,.6), inset -14px 0 26px rgba(0,0,0,.5)}
-.curtain-left::after{left:100%;background:linear-gradient(90deg,rgba(0,0,0,.7),transparent)}
-.curtain-right{right:0;transform-origin:right center;border-left:2px solid rgba(197,168,128,.5);box-shadow:-10px 0 34px rgba(0,0,0,.6), inset 14px 0 26px rgba(0,0,0,.5)}
-.curtain-right::after{right:100%;background:linear-gradient(270deg,rgba(0,0,0,.7),transparent)}
-/* abre franzindo: a cortina se acumula (scaleX) enquanto desliza */
-.curtains-open .curtain-left{transform:translateX(-88%) scaleX(.42);pointer-events:none;filter:brightness(.8) saturate(1.1)}
-.curtains-open .curtain-right{transform:translateX(88%) scaleX(.42);pointer-events:none;transition-delay:.12s;filter:brightness(.8) saturate(1.1)}
-.curtains-open .curtain-panel::after{opacity:.0}
-.hall-interior{transition:opacity 1.8s ease .3s, filter 2s ease .2s, transform 2.2s var(--ease) .2s}
-.hall-closed{opacity:.25;filter:brightness(.4) blur(3px);transform:scale(.97);pointer-events:none;user-select:none;transition-delay:0s}
-.hall-revealed{opacity:1;filter:brightness(1) blur(0);transform:scale(1)}
-/* luz do salão que se revela ao abrir */
-.hall-light{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(255,226,180,.12),transparent 70%);opacity:0;transition:opacity 2.4s ease .5s}
-.curtains-open .hall-light{opacity:1}
+  /* nav pílula */
+  .nav-pill{
+    background:color-mix(in srgb,var(--papel) 95%,transparent);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    color:var(--tescuro); border:1px solid color-mix(in srgb,var(--tescuro) 15%,transparent);
+    box-shadow:0 10px 40px -12px rgba(0,0,0,.4);
+  }
+  .nav-link{ position:relative; padding:.35rem .1rem; }
+  .nav-link::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--terra); transform:scaleX(0); transform-origin:left; transition:transform .35s; }
+  .nav-link:hover::after{ transform:scaleX(1); }
+  .nav-cta{ display:inline-flex; align-items:center; padding:.42rem 1.05rem; border-radius:999px; font-size:.68rem; font-weight:500; text-transform:uppercase; letter-spacing:.14em; color:var(--terra); border:1px solid color-mix(in srgb,var(--terra) 55%,transparent); transition:background .3s,color .3s,border-color .3s; white-space:nowrap; }
+  .nav-cta:hover{ background:var(--terra); color:var(--tclaro); border-color:var(--terra); }
+  @media (min-width:1024px){ .feat{ will-change:transform; } }
 
-.bump{animation:bump .5s}@keyframes bump{40%{transform:scale(1.5)}}
-.fade{animation:fade 1.1s var(--ease) both}@keyframes fade{from{opacity:0;transform:translateY(14px)}}
-.reveal>*{animation:fade 1.1s var(--ease) both}
-.reveal>*:nth-child(2){animation-delay:.1s}.reveal>*:nth-child(3){animation-delay:.2s}.reveal>*:nth-child(4){animation-delay:.3s}.reveal>*:nth-child(5){animation-delay:.4s}
-.overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;background:radial-gradient(circle at 50% 40%,rgba(30,18,12,.9),rgba(6,4,3,.95));backdrop-filter:blur(8px)}
-input,textarea{width:100%;border:1px solid rgba(197,168,128,.4);background:#1B120D;color:var(--cream);padding:.8rem .9rem;font:inherit;font-size:.9rem;transition:border-color .3s,box-shadow .3s}
-input:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,168,128,.15)}
-input::placeholder,textarea::placeholder{color:rgba(245,239,230,.42)}
-.hair{border-color:var(--gold-hair)}
-@media(max-width:640px){
-  .btn{padding:.8rem 1.1rem;font-size:.66rem}
-  .eyebrow{letter-spacing:.2em}.eyebrow::before{width:20px}
-  .spotlight::before{height:360px;top:-50px}
-  .curtains-open .curtain-left{transform:translateX(-92%) scaleX(.35)}
-  .curtains-open .curtain-right{transform:translateX(92%) scaleX(.35)}
-}
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
-</style></head>
-<body><div id="root"></div>
-<script>
-// ============ CONFIGURAÇÃO EDITÁVEL ============
-const GALLERY_CONFIG = {
-  name: "ARTHEIROS",
-  curator: "Amanda Costa",
-  city: "Campinas, SP",
-  whatsapp: "5519999999999", // TROQUE: DDI+DDD+número da curadoria
-  paymentLink: "https://pagamento.exemplo.com/artheiros", // TROQUE: link Pix/Cartão real
-  tourSeconds: 7,
-  // Vídeo de entrada da galeria na pasta /assets do GitHub
-  heroVideo: "./assets/entrada-galeria.mp4",
-  // Capa de carregamento e quadro lateral
-  heroImage: "https://images.unsplash.com/photo-1577720643272-265f09367456?auto=format&fit=crop&w=1000&q=85",
-  heroCaption: "Salão Principal · Curadoria Inaugural Artheiros"
-};
+  /* divisórias arquitetônicas: junção reta + filete de latão + plaqueta de sala */
+  .rd{ position:relative; height:68px; background:linear-gradient(to bottom,var(--rt) 50%,var(--rb) 50%); }
+  .rd::before{ content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:color-mix(in srgb,var(--ouro) 40%,transparent); }
+  .rd-plaque{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); padding:.5rem 1.5rem; background:var(--carvao); color:var(--ouro); border:1px solid color-mix(in srgb,var(--ouro) 40%,transparent); font-size:.6rem; letter-spacing:.24em; white-space:nowrap; box-shadow:0 6px 14px rgba(0,0,0,.25); }
+  .rd-plaque::before,.rd-plaque::after{ content:""; position:absolute; top:50%; width:3px; height:3px; border-radius:50%; background:var(--ouro); opacity:.7; transform:translateY(-50%); }
+  .rd-plaque::before{ left:8px; } .rd-plaque::after{ right:8px; }
+  @media (max-width:480px){ .rd-plaque{ padding:.45rem 1.1rem; letter-spacing:.18em; font-size:.55rem; } }
 
-const fallbackArt = (title) => 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"><defs><radialGradient id="g" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#8C5A3C"/><stop offset="100%" stop-color="#2B1B12"/></radialGradient></defs><rect width="400" height="500" fill="url(#g)"/><circle cx="200" cy="220" r="95" fill="#6B241B" opacity=".8"/><text x="200" y="440" fill="#F5EFE6" font-family="Georgia,serif" font-size="18" text-anchor="middle">${title}</text></svg>`);
+  /* gaveta */
+  #drawer{ transform:translateX(100%); transition:transform .6s cubic-bezier(.77,0,.18,1); }
+  #drawer.open{ transform:none; }
+  #drawer-bg{ opacity:0; pointer-events:none; transition:opacity .5s; }
+  #drawer-bg.open{ opacity:1; pointer-events:auto; }
+  .drawer-link{ display:flex; align-items:baseline; gap:1.2rem; padding:.9rem 0; border-bottom:1px solid rgba(245,242,235,.12); transition:padding .35s, color .3s; }
+  .drawer-link:hover{ padding-left:.8rem; color:var(--ouro); }
 
-const ARTWORKS = [
- { id:1, title:"Chão de Barro", artist:"Helena Duarte", artistBio:"Pintora campineira, formada pela Unicamp, trabalha com pigmentos de terra colhidos no interior paulista.", artistProcess:"Helena mistura óxidos e cola natural, e pinta no chão do ateliê, deixando a gravidade conduzir as camadas.", city:"Campinas, SP", category:"Artes Visuais", technique:"Pigmentos naturais e óleo sobre tela", dimensions:"90 × 110 cm", year:2024, price:4800, likes:128, frameStyle:"wood", featuredInTour:true,
-   curatedDescription:"Há telas que se olham e telas que se pisam com os olhos. Esta guarda o cheiro de terra depois da chuva.",
-   imageUrl:"https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=800&q=85" },
- { id:2, title:"Vaso Arco Lento", artist:"Tomás Ribeiro", artistBio:"Ceramista de Valinhos, queima em forno a lenha construído por ele mesmo.", artistProcess:"Cada peça é torneada em uma só sessão e queimada por 18 horas, aceitando as marcas do fogo.", city:"Valinhos, SP", category:"Cerâmica", technique:"Grés torneado, esmalte de cinzas", dimensions:"34 × 22 cm", year:2025, price:1350, likes:96, frameStyle:"gallery-white", featuredInTour:true,
-   curatedDescription:"Um vaso que lembra uma arcada: o vazio dentro dele é a parte mais bem desenhada.",
-   imageUrl:"https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=800&q=85" },
- { id:3, title:"Janela às Quatro", artist:"Luíza Menezes", artistBio:"Fotógrafa documental, registra a luz em casas e fábricas antigas da região metropolitana.", artistProcess:"Luíza fotografa sempre na mesma hora do dia e revela em papel de algodão, sem retoques.", city:"Campinas, SP", category:"Fotografia", technique:"Impressão fine art em papel algodão", dimensions:"60 × 80 cm", year:2023, price:2200, likes:143, frameStyle:"black", featuredInTour:true,
-   curatedDescription:"A tarde entra pela janela e deita no chão. Luíza só precisou esperar.",
-   imageUrl:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=85" },
- { id:4, title:"Semente Dobrada", artist:"Caio Ferraz", artistBio:"Escultor de Sousas, usa madeira de demolição e bronze fundido.", artistProcess:"Caio esculpe a partir do veio da madeira, sem desenho prévio, até a forma 'aparecer'.", city:"Sousas, Campinas", category:"Arte & Natureza", technique:"Madeira de demolição e bronze", dimensions:"48 × 30 × 26 cm", year:2024, price:6900, likes:77, frameStyle:"wood", featuredInTour:true,
-   curatedDescription:"Uma semente em pleno gesto de crescer. Olhe devagar: ela ainda se move.",
-   imageUrl:"https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&fit=crop&w=800&q=85" },
- { id:5, title:"Herbário I — Aroeira", artist:"Marina Sato", artistBio:"Gravadora e botânica amadora, pesquisa a flora do cerrado paulista.", artistProcess:"Marina entinta folhas reais e imprime em prensa manual, tirando só dez exemplares de cada matriz.", city:"Campinas, SP", category:"Arte & Natureza", technique:"Gravura em relevo, edição de 10", dimensions:"40 × 55 cm", year:2025, price:980, likes:112, frameStyle:"gallery-white", featuredInTour:true,
-   curatedDescription:"Uma folha que virou memória. Cada nervura é um mapa de onde ela viveu.",
-   imageUrl:"https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=85" },
- { id:6, title:"Estrela de Bolso", artist:"Coletivo Ateliê 13", artistBio:"Coletivo de seis artistas que produz peças pequenas em edição limitada.", artistProcess:"As peças passam por cinco mãos antes de ficarem prontas: desenho, molde, queima, pátina e assinatura.", city:"Campinas, SP", category:"Artes Visuais", technique:"Resina, pátina e folha de latão", dimensions:"18 × 18 × 6 cm", year:2026, price:640, likes:64, frameStyle:"black", featuredInTour:true,
-   curatedDescription:"Uma estrela para guardar na estante. Cabe na mão, mas ocupa a sala inteira.",
-   imageUrl:"https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=800&q=85" }
-];
-const CATS = ["Todas","Artes Visuais","Cerâmica","Fotografia","Arte & Natureza"];
-const brl = n => n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  /* tags */
+  .tag{ display:inline-block; padding:.28rem .6rem; font-size:.62rem; letter-spacing:.16em; border-radius:2px; font-family:'Space Mono',monospace; }
+  .tag-unica{ background:var(--terra); color:var(--tclaro); }
+  .tag-limitada{ background:var(--ouro); color:#14241E; }
+  .tag-destaque{ background:var(--carvao); color:var(--ouro); border:1px solid var(--ouro); }
 
-// ============ APP ============
-const {useState,useEffect,useRef} = React;
-const html = htm.bind(React.createElement);
-const Ic = ({d,s=20}) => html`<svg width=${s} height=${s} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d=${d}/></svg>`;
-const P = {
-  bag:"M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0",
-  x:"M18 6 6 18M6 6l12 12",
-  l:"m15 18-6-6 6-6",
-  r:"m9 18 6-6-6-6",
-  heart:"M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z",
-  room:"M3 3h18v14H3zM7 21h10"
-};
+  /* pílulas de filtro */
+  .pill{ padding:.55rem 1.1rem; border-radius:999px; font-size:.82rem; border:1px solid color-mix(in srgb,var(--tescuro) 25%,transparent); transition:all .3s; cursor:pointer; background:transparent; color:var(--tescuro); }
+  .pill:hover{ border-color:var(--terra); color:var(--terra); }
+  .pill[aria-pressed="true"]{ background:var(--verde); color:var(--papel); border-color:var(--verde); }
 
-// Inclinação 3D + reflexo de verniz que acompanha o cursor
-const tilt=(e,k=14,z=18)=>{const t=e.currentTarget,r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;t.style.setProperty('--gx',(x*100)+'%');t.style.setProperty('--gy',(y*100)+'%');t.style.transform=`perspective(1000px) rotateY(${(x-.5)*k}deg) rotateX(${-(y-.5)*k}deg) translateZ(${z}px)`};
-const untilt=e=>{e.currentTarget.style.transform=''};
+  /* accordion */
+  .acc-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .7s cubic-bezier(.77,0,.18,1); }
+  .acc-item.open .acc-body{ grid-template-rows:1fr; }
+  .acc-body > div{ overflow:hidden; }
+  .acc-chevron{ transition:transform .5s; }
+  .acc-item.open .acc-chevron{ transform:rotate(45deg); }
+  .acc-item{ border-top:1px solid color-mix(in srgb,var(--tescuro) 18%,transparent); }
+  .acc-item:last-child{ border-bottom:1px solid color-mix(in srgb,var(--tescuro) 18%,transparent); }
 
-const Logo = ({s=42}) => html`<svg viewBox="0 0 60 60" width=${s} height=${s} aria-hidden="true">
-  <path d="M8 54V30a22 22 0 0 1 44 0v24" fill="none" stroke="#C5A880" stroke-width="1.3"/>
-  <path d="M14 54V31a16 16 0 0 1 32 0v23" fill="none" stroke="#C5A880" stroke-width=".7"/>
-  <path d="M16 54c0-12 4-18 12-18s8 8 6 18z" fill="#8C3226"/>
-  <path d="M30 54c0-8 3-12 9-12s7 6 5 12z" fill="#6E6D47"/>
-  <path d="M38 14l1.7 4.6L44 20l-4.3 1.4L38 26l-1.7-4.6L32 20l4.3-1.4z" fill="#F5EFE6"/>
-  <path d="M4 54h52M4 57h52" stroke="#C5A880" stroke-width=".7"/>
-</svg>`;
+  /* revelação de texto (data-reveal) */
+  html.rv [data-reveal]{ opacity:0; transform:translateY(28px); transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); transition-delay:var(--d,0s); }
+  html.rv [data-reveal].in{ opacity:1; transform:none; }
 
-const Frame = ({a,cls="",imgCls="",style,...r}) => html`<div className=${`frame f-${a.frameStyle} ${cls}`} style=${style} ...${r}>
-  <div style=${{width:'100%',height:'100%',overflow:'hidden',background:'#120D0A'}}>
-    <img src=${a.imageUrl} className=${imgCls} alt=${a.title+', de '+a.artist} onError=${e=>{e.currentTarget.onerror=null;e.currentTarget.src=fallbackArt(a.title)}}/>
+  /* revelação teatral (fallback sem ScrollTrigger) */
+  .clip-wrap.fb{ clip-path:inset(100% -80px -100px -80px); transition:clip-path 1.5s cubic-bezier(.77,0,.18,1); }
+  .clip-wrap.fb .art img{ transform:scale(1.08); transition:transform 1.9s cubic-bezier(.2,.7,.2,1); }
+  .clip-wrap.fb.in{ clip-path:inset(0% -80px -100px -80px); }
+  .clip-wrap.fb.in .art img{ transform:scale(1); }
+
+  /* lightbox */
+  html.lb-open, html.lb-open body{ overflow:hidden; }
+  #lb{ opacity:0; transition:opacity .45s; }
+  #lb.on{ opacity:1; }
+  #lb-stage{ cursor:zoom-in; overflow:hidden; }
+  #lb-stage.zoomed{ cursor:zoom-out; }
+  #lb-img{ transition:transform .5s cubic-bezier(.2,.7,.2,1); max-width:100%; max-height:100%; object-fit:contain; will-change:transform; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  #lb-stage.zoomed #lb-img{ transform:scale(2.6); transition:transform .5s cubic-bezier(.2,.7,.2,1); }
+  .spec{ display:grid; grid-template-columns:110px 1fr; gap:.4rem 1rem; font-size:.78rem; }
+  .spec dt{ color:var(--ouro); text-transform:uppercase; letter-spacing:.12em; font-size:.66rem; padding-top:.15rem; }
+
+  /* estrelinha divisora */
+  .rule{ height:1px; background:linear-gradient(90deg,var(--ouro),transparent); }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+    html.rv [data-reveal]{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ MENU FLUTUANTE (PILL NAV) ============ -->
+<header class="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-40 w-[min(94vw,1040px)]">
+  <nav class="nav-pill rounded-full flex items-center justify-between gap-3 px-5 py-2" aria-label="Navegação principal">
+    <a href="#top" id="nav-brand" class="serif text-xl font-medium italic leading-none whitespace-nowrap"></a>
+    <div id="nav-links" class="hidden lg:flex items-center gap-8"></div>
+    <div class="flex items-center gap-2">
+      <a id="nav-cta" class="nav-cta"></a>
+      <button id="menu-btn" class="mono text-[.62rem] tracking-[.2em] px-3.5 py-2 rounded-full border" style="border-color:color-mix(in srgb,var(--tescuro) 25%,transparent)" aria-expanded="false" aria-controls="drawer">MENU</button>
+    </div>
+  </nav>
+</header>
+
+<!-- gaveta lateral -->
+<div id="drawer-bg" class="fixed inset-0 z-[900] bg-black/60"></div>
+<aside id="drawer" class="fixed top-0 right-0 bottom-0 z-[910] w-[min(92vw,440px)] bg-carvao t-claro p-8 sm:p-10 flex flex-col" aria-hidden="true" aria-label="Menu">
+  <div class="flex items-center justify-between mb-10">
+    <span class="mono text-[.68rem] tracking-[.24em] t-ouro">ÍNDICE DA EXPOSIÇÃO</span>
+    <button id="drawer-close" class="mono text-[.7rem] tracking-[.2em] px-3 py-2 rounded-full border border-white/25">FECHAR ✕</button>
   </div>
-</div>`;
+  <nav id="drawer-nav" class="serif text-3xl sm:text-4xl"></nav>
+  <div class="mt-auto pt-10">
+    <a id="drawer-wa" target="_blank" rel="noopener" class="btn btn-ouro w-full justify-center">Falar com a curadoria no WhatsApp</a>
+    <p id="drawer-sub" class="mono text-[.68rem] mt-5 claro-70"></p>
+  </div>
+</aside>
 
-const Like = ({a,liked,onLike}) => html`<button className="btn flex items-center gap-2" onClick=${()=>onLike(a.id)} aria-pressed=${liked} style=${{background:liked?'linear-gradient(180deg,#7E2D22,#5B1D15)':undefined,borderColor:liked?'#A5463A':undefined}}>
-  <span key=${a.likes} className="bump inline-flex"><${Ic} d=${P.heart} s=${15}/></span>
-  ${liked?'Apreciada':'Apreciar obra'} · ${a.likes}
-</button>`;
+<main id="top">
 
-function Tour({list,onClose,onAdd}) {
-  const [i,setI]=useState(0),[pl,setPl]=useState(true),[pr,setPr]=useState(0),n=list.length,a=list[i];
-  useEffect(()=>{ if(!pl) return; const t=setInterval(()=>setPr(p=>{ if(p>=100){ setI(x=>(x+1)%n); return 0 } return p+100/(GALLERY_CONFIG.tourSeconds*20) }),50); return ()=>clearInterval(t) },[pl,n]);
-  const go=d=>{setI((i+d+n)%n);setPr(0)};
-  return html`<div className="fixed inset-0 z-[70] flex flex-col" style=${{background:'radial-gradient(circle at 35% 45%, #2B1D16 0%, #0C0705 82%)',color:'#F5EFE6',paddingTop:'env(safe-area-inset-top,0px)',paddingBottom:'env(safe-area-inset-bottom,0px)'}}>
-    <div className="flex gap-1.5 p-4">${list.map((_,k)=>html`<div key=${k} style=${{flex:1,height:2,background:'rgba(197,168,128,.25)'}}><div style=${{height:'100%',background:'#C5A880',width:(k<i?100:k===i?pr:0)+'%'}}/></div>`)}</div>
-    <div className="flex-1 grid md:grid-cols-2 gap-8 items-center px-6 md:px-16 overflow-auto" style=${{perspective:1000}}>
-      <div className="flex justify-center py-8 spotlight">
-        <div style=${{width:'min(72vw,360px)',aspectRatio:'4/5'}}>
-          <${Frame} a=${a} imgCls=${pl?'kb':''} key=${'f'+a.id} cls="fade" style=${{width:'100%',height:'100%',boxShadow:'0 35px 70px rgba(0,0,0,.85)',cursor:'default'}}/>
+<!-- ============ 2. HERO — EXPOSIÇÃO INAUGURAL ============ -->
+<section id="galeria" class="relative bg-verde t-claro overflow-hidden">
+  <div id="spot" aria-hidden="true"></div>
+  <div class="hero-vignette absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6 pt-36 pb-24 lg:pt-44 lg:pb-28 grid lg:grid-cols-[1.05fr_.95fr] gap-16 items-center min-h-[100svh]">
+    <div>
+      <p data-reveal id="hero-tag" class="mono text-[.7rem] sm:text-xs tracking-[.26em] t-ouro mb-7 flex items-center gap-4"><span class="rule w-12 inline-block"></span><span></span></p>
+      <h1 data-reveal style="--d:.1s" id="hero-title" class="serif font-bold leading-[.98] text-[clamp(2.8rem,7.2vw,6.2rem)] tracking-tight"></h1>
+      <p data-reveal style="--d:.2s" id="hero-sub" class="mt-8 max-w-xl text-base sm:text-lg leading-relaxed claro-70 font-light"></p>
+      <div data-reveal style="--d:.3s" class="mt-10 flex flex-wrap gap-4">
+        <a id="hero-cta1" class="btn btn-ouro"></a>
+        <a id="hero-cta2" class="btn btn-line-claro"></a>
+      </div>
+    </div>
+
+    <div class="relative flex justify-center lg:justify-end" data-reveal style="--d:.25s">
+      <div class="relative w-full max-w-[460px]">
+        <div id="hero-frame" class="openable" role="button" tabindex="0"></div>
+        <!-- placa de museu -->
+        <div class="plaque mt-8 mx-auto w-[82%] px-5 py-3.5 text-center">
+          <p id="hero-plaque-title" class="serif italic font-semibold text-lg leading-tight"></p>
+          <p id="hero-plaque-artist" class="mono text-[.66rem] tracking-[.14em] uppercase mt-1"></p>
+          <p id="hero-plaque-meta" class="mono text-[.62rem] opacity-70 mt-0.5"></p>
         </div>
-      </div>
-      <div key=${'t'+a.id} className="reveal max-w-md pb-6">
-        <p className="eyebrow">Sala de Exposição · Obra 0${i+1}/0${n}</p>
-        <h2 className="serif italic text-4xl md:text-6xl my-4 leading-[1.05]">${a.title}</h2>
-        <p className="text-xs uppercase tracking-[.2em] mb-4" style=${{color:'#C5A880'}}>${a.artist} · ${a.city}</p>
-        <p className="serif text-2xl leading-relaxed italic opacity-95">“${a.curatedDescription}”</p>
-        <p className="text-sm opacity-80 mt-4 leading-relaxed">${a.artistBio} ${a.artistProcess}</p>
-        <p className="text-sm mt-5 pt-4" style=${{color:'#C5A880',borderTop:'1px solid rgba(197,168,128,.25)'}}>${a.technique} · ${a.dimensions} · <strong className="text-base text-[#F5EFE6]">${brl(a.price)}</strong></p>
-      </div>
-    </div>
-    <div className="flex flex-wrap items-center justify-center gap-3 p-4 md:p-5" style=${{borderTop:'1px solid rgba(197,168,128,.2)',background:'rgba(12,7,5,.8)'}}>
-      <button className="btn" aria-label="Anterior" onClick=${()=>go(-1)}><${Ic} d=${P.l} s=${16}/></button>
-      <button className="btn" onClick=${()=>setPl(!pl)}>${pl?'Pausar Visita':'Continuar Visita'}</button>
-      <button className="btn" aria-label="Próxima" onClick=${()=>go(1)}><${Ic} d=${P.r} s=${16}/></button>
-      <button className="btn b-w" onClick=${()=>onAdd(a.id)}>Adquirir esta obra</button>
-      <button className="btn" onClick=${onClose}>Voltar à galeria</button>
-    </div>
-  </div>`;
-}
-
-function Room({a,onClose,liked,onLike,inCart,onAdd}) {
-  const [room,setRoom]=useState(false);
-  return html`<div className="overlay" style=${{perspective:1400}} onClick=${onClose}>
-    <div className="pop relative w-full max-w-5xl max-h-[92vh] overflow-auto grid md:grid-cols-2" style=${{background:'linear-gradient(180deg,#1F1510,#190F0B)',color:'#F5EFE6',border:'1px solid rgba(197,168,128,.45)',boxShadow:'0 40px 100px rgba(0,0,0,.92)'}} onClick=${e=>e.stopPropagation()}>
-      <button className="absolute right-4 top-4 z-10 p-1 hover:opacity-75" aria-label="Fechar" onClick=${onClose}><${Ic} d=${P.x}/></button>
-      <div className="p-8 flex flex-col items-center justify-center gap-6" style=${{background:room?'radial-gradient(circle at 50% 30%, #3E3228 0%, #1C1612 100%)':'radial-gradient(circle at 50% 35%, #33231A 0%, #120B08 100%)',minHeight:420,borderRight:'1px solid rgba(197,168,128,.2)'}}>
-        ${room?html`<div style=${{width:'100%',maxWidth:350}}>
-          <div style=${{width:'46%',margin:'0 auto',aspectRatio:'4/5'}}><${Frame} a=${a} style=${{width:'100%',height:'100%',cursor:'default',boxShadow:'0 16px 28px rgba(0,0,0,.65)'}}/></div>
-          <svg viewBox="0 0 300 110" style=${{width:'100%',marginTop:18}} aria-label="Sofá minimalista para noção de escala">
-            <rect x="20" y="30" width="260" height="55" rx="10" fill="#3D3C27"/>
-            <rect x="10" y="50" width="40" height="50" rx="10" fill="#2E2D1D"/>
-            <rect x="250" y="50" width="40" height="50" rx="10" fill="#2E2D1D"/>
-            <rect x="40" y="95" width="6" height="12" fill="#0D0907"/><rect x="254" y="95" width="6" height="12" fill="#0D0907"/>
+        <!-- selo giratório -->
+        <div class="absolute -top-8 -left-4 sm:-left-14 w-[120px] sm:w-[148px]" aria-hidden="true">
+          <svg viewBox="0 0 200 200" class="seal w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,.5)]">
+            <defs><path id="seal-path" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/></defs>
+            <circle cx="100" cy="100" r="97" fill="#8C3B2B" stroke="#B8924A" stroke-width="2"/>
+            <circle cx="100" cy="100" r="58" fill="none" stroke="#B8924A" stroke-width=".8" stroke-dasharray="2 4"/>
+            <text id="seal-text" font-family="Space Mono, monospace" font-size="12.5" font-weight="700" fill="#F5F2EB"><textPath href="#seal-path" textLength="470" lengthAdjust="spacing"></textPath></text>
           </svg>
-        </div>`
-        :html`<div className="spotlight" style=${{width:'min(100%,350px)',aspectRatio:'4/5'}}><${Frame} a=${a} style=${{width:'100%',height:'100%'}} onMouseMove=${e=>tilt(e,10,12)} onMouseLeave=${untilt}/></div>`}
-        <button className="btn flex items-center gap-2" onClick=${()=>setRoom(!room)}><${Ic} d=${P.room} s=${16}/>${room?'Ver obra isolada':'Simular na parede da sala'}</button>
-      </div>
-      <div className="p-6 md:p-10 reveal">
-        <p className="eyebrow">${a.category} · ${a.city}</p>
-        <h2 className="serif italic text-4xl md:text-5xl my-3 leading-[1.05]">${a.title}</h2>
-        <p className="serif text-2xl" style=${{color:'#C5A880'}}>${a.artist}</p>
-        <div>
-          <p className="serif italic text-lg mt-4 leading-relaxed opacity-95">“${a.curatedDescription}”</p>
-          <p className="text-sm mt-4 leading-relaxed opacity-85"><b className="text-[11px] uppercase tracking-[.18em]" style=${{color:'#C5A880'}}>Sobre o artista · </b>${a.artistBio}</p>
-          <p className="text-sm mt-2 leading-relaxed opacity-85"><b className="text-[11px] uppercase tracking-[.18em]" style=${{color:'#C5A880'}}>Processo criativo · </b>${a.artistProcess}</p>
-        </div>
-        <dl className="grid grid-cols-2 gap-3 text-sm my-5 py-4" style=${{borderTop:'1px solid rgba(197,168,128,.25)',borderBottom:'1px solid rgba(197,168,128,.25)'}}>
-          <div><dt className="text-[10px] uppercase tracking-[.2em] opacity-60">Técnica</dt><dd>${a.technique}</dd></div>
-          <div><dt className="text-[10px] uppercase tracking-[.2em] opacity-60">Dimensões</dt><dd>${a.dimensions}</dd></div>
-          <div><dt className="text-[10px] uppercase tracking-[.2em] opacity-60">Ano</dt><dd>${a.year}</dd></div>
-          <div><dt className="text-[10px] uppercase tracking-[.2em] opacity-60">Investimento</dt><dd className="font-semibold text-base" style=${{color:'#C5A880'}}>${brl(a.price)}</dd></div>
-        </dl>
-        <div className="flex items-center gap-3 mb-6 p-3" style=${{background:'rgba(31,36,24,.65)',border:'1px solid rgba(197,168,128,.25)'}}>
-          <svg width="48" height="48" viewBox="0 0 58 58" aria-hidden="true"><circle cx="29" cy="29" r="27" fill="#555436"/><circle cx="29" cy="29" r="22" fill="none" stroke="#C5A880" stroke-width=".9"/><path d="M29 14l3 10 10 3-10 3-3 10-3-10-10-3 10-3z" fill="#F5EFE6"/></svg>
-          <p className="text-xs leading-snug">Obra única com <strong>Certificado de Autenticidade</strong><br/>assinado pela curadora <span className="serif italic text-base" style=${{color:'#C5A880'}}>${GALLERY_CONFIG.curator}</span></p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <${Like} a=${a} liked=${liked} onLike=${onLike}/>
-          <button className="btn b-w" onClick=${()=>onAdd(a.id)}>${inCart?'Remover da sacola':'Adicionar à sacola'}</button>
+          <span class="serif italic absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl" style="color:#F5F2EB">AC</span>
         </div>
       </div>
     </div>
-  </div>`;
-}
+  </div>
 
-// SALÃO PRINCIPAL COM CORTINAS DE VELUDO
-function Wall({arts,onOpen,hallOpen,onOpenHall,onCloseHall}) {
-  const [cat,setCat]=useState("Todas"),[leap,setLeap]=useState(null);
-  const list=arts.filter(a=>cat==="Todas"||a.category===cat), H=[370,310,420,340,390,320];
-  const click=a=>{setLeap(a.id);setTimeout(()=>{setLeap(null);onOpen(a.id)},650)};
-  return html`<section id="parede" className=${`gallery-stage min-h-[780px] border-y hair ${hallOpen?'curtains-open':''}`}>
-    <div className="hall-light"></div>
-    <div className="curtain-valance"></div>
-    <div className="curtain-panel curtain-left"></div>
-    <div className="curtain-panel curtain-right"></div>
+</section>
 
-    <div className=${`absolute inset-0 z-30 flex flex-col items-center justify-center text-center px-6 transition-all duration-1000 ${hallOpen?'opacity-0 pointer-events-none scale-95':'opacity-100 cursor-pointer'}`} onClick=${onOpenHall}>
-      <div className="p-8 md:p-11 max-w-md" style=${{background:'linear-gradient(180deg,rgba(26,13,10,.82),rgba(16,8,6,.86))',border:'1px solid rgba(197,168,128,.5)',boxShadow:'0 28px 70px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,236,200,.1)',backdropFilter:'blur(8px)'}}>
-        <div className="flex justify-center mb-4"><${Logo} s=${48}/></div>
-        <p className="text-[11px] uppercase tracking-[.28em] mb-3" style=${{color:'#C5A880'}}>Salão Principal · Acervo na Parede</p>
-        <h2 className="serif text-4xl md:text-5xl mb-3 leading-[1.05]">Abertura da <i>Exposição</i></h2>
-        <p className="text-sm opacity-80 leading-relaxed mb-7">Afaste as cortinas para revelar as obras selecionadas da temporada e explorar cada peça de perto.</p>
-        <button className="btn b-w" onClick=${e=>{e.stopPropagation();onOpenHall()}}>Abrir cortinas da exposição</button>
+<div class="rd" role="separator" data-sala="curadoria" style="--rt:var(--verde);--rb:var(--papel)"><span class="rd-plaque mono"></span></div>
+
+<!-- ============ 3. OBRAS EM DESTAQUE ============ -->
+<section id="destaques" class="relative bg-papel on-light pt-20 pb-28 lg:pb-40 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="max-w-3xl">
+      <p data-reveal id="dest-tag" class="mono text-[.7rem] tracking-[.26em] t-terra mb-5"></p>
+      <h2 data-reveal style="--d:.08s" id="dest-title" class="serif font-bold text-[clamp(2.4rem,5.4vw,4.4rem)] leading-[1.02]"></h2>
+      <p data-reveal style="--d:.16s" id="dest-sub" class="mt-6 text-lg escuro-70 font-light leading-relaxed max-w-2xl"></p>
+    </div>
+    <div id="dest-grid" class="mt-16 lg:mt-24 grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-20 lg:gap-x-9 items-start"></div>
+  </div>
+</section>
+
+<div class="rd" role="separator" data-sala="acervo" style="--rt:var(--papel);--rb:var(--papel)"><span class="rd-plaque mono"></span></div>
+
+<!-- ============ 4. ACERVO & ARTISTAS ============ -->
+<section id="acervo" class="relative bg-papel on-light pt-20 pb-24 lg:pb-32">
+  <div class="max-w-6xl mx-auto px-6">
+    <p data-reveal id="acv-tag" class="mono text-[.7rem] tracking-[.26em] t-terra mb-5"></p>
+    <h2 data-reveal style="--d:.08s" id="acv-title" class="serif font-bold text-[clamp(2.4rem,5.4vw,4.4rem)] leading-[1.02] max-w-3xl"></h2>
+    <p data-reveal style="--d:.16s" id="acv-sub" class="mt-6 text-lg escuro-70 font-light max-w-2xl leading-relaxed"></p>
+
+    <div data-reveal id="filters" class="mt-12 flex flex-wrap gap-2.5" role="group" aria-label="Filtrar por categoria"></div>
+    <p id="acv-count" class="mono text-[.7rem] tracking-[.14em] mt-6 escuro-70" aria-live="polite"></p>
+
+    <div id="artistas-list" class="mt-8"></div>
+  </div>
+</section>
+
+<div class="rd" role="separator" data-sala="manifesto" style="--rt:var(--papel);--rb:var(--verde)"><span class="rd-plaque mono"></span></div>
+
+<!-- ============ 5. A CURADORIA & MANIFESTO ============ -->
+<section id="curadoria" class="relative bg-verde t-claro pt-24 pb-24 lg:pb-32 overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none opacity-70" style="background:radial-gradient(circle 600px at 20% 30%, rgba(255,206,130,.14), transparent 70%)" aria-hidden="true"></div>
+  <div class="relative max-w-7xl mx-auto px-6 grid lg:grid-cols-[.85fr_1.15fr] gap-16 lg:gap-24 items-center">
+    <div data-reveal class="max-w-[440px] mx-auto lg:mx-0 w-full">
+      <div id="cur-frame" class="openable-none"></div>
+      <div class="plaque mt-8 mx-auto w-[78%] px-5 py-3 text-center">
+        <p id="cur-name" class="serif italic font-semibold text-lg leading-tight"></p>
+        <p id="cur-role" class="mono text-[.64rem] tracking-[.14em] uppercase mt-1"></p>
       </div>
     </div>
+    <div>
+      <p data-reveal id="cur-tag" class="mono text-[.7rem] tracking-[.26em] t-ouro mb-6"></p>
+      <h2 data-reveal style="--d:.08s" id="cur-manifesto" class="serif font-bold text-[clamp(2.2rem,4.8vw,4rem)] leading-[1.05]"></h2>
+      <div id="cur-paras" class="mt-8 space-y-5 max-w-xl claro-70 font-light leading-relaxed text-base sm:text-lg"></div>
+      <div id="cur-pillars" class="mt-12 grid sm:grid-cols-3 gap-6"></div>
+    </div>
+  </div>
+</section>
 
-    <div className=${`hall-interior px-6 md:px-16 py-24 relative ${hallOpen?'hall-revealed':'hall-closed'}`}>
-      <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-        <div className="max-w-3xl">
-          <p className="eyebrow mb-3">Salão Principal · Parede em Madeira Nobre</p>
-          <h2 className="serif text-4xl md:text-6xl leading-[1.04]">Acervo <i>em exposição</i></h2>
-          <p className="text-sm opacity-75 mt-3">Clique sobre qualquer moldura iluminada para destacá-la da parede e explorar a história da obra.</p>
-        </div>
-        <button className="btn" onClick=${onCloseHall}>Fechar cortinas</button>
+<div class="rd" role="separator" data-sala="chamada" style="--rt:var(--verde);--rb:var(--terra)"><span class="rd-plaque mono"></span></div>
+
+<!-- ============ 6. CHAMADA PARA ARTISTAS ============ -->
+<section id="artistas" class="relative bg-terra t-claro pt-24 pb-24 lg:pb-32 overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(circle 700px at 85% 10%, rgba(184,146,74,.35), transparent 70%)" aria-hidden="true"></div>
+  <div class="relative max-w-6xl mx-auto px-6">
+    <div class="max-w-3xl">
+      <p data-reveal id="cta-tag" class="mono text-[.7rem] tracking-[.26em] mb-6" style="color:#E3C98F"></p>
+      <h2 data-reveal style="--d:.08s" id="cta-title" class="serif font-bold text-[clamp(2.6rem,6vw,5rem)] leading-[1]"></h2>
+      <p data-reveal style="--d:.16s" id="cta-sub" class="mt-6 text-lg leading-relaxed max-w-2xl" style="opacity:.9"></p>
+    </div>
+    <ol id="cta-steps" class="mt-14 grid md:grid-cols-3 gap-6 list-none p-0"></ol>
+    <div data-reveal class="mt-12">
+      <a id="cta-btn" target="_blank" rel="noopener" class="btn btn-ouro"></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="rd" role="separator" data-sala="saida" style="--rt:var(--terra);--rb:var(--carvao)"><span class="rd-plaque mono"></span></div>
+
+<!-- ============ 7. RODAPÉ INSTITUCIONAL ============ -->
+<footer class="bg-carvao t-claro pt-14 pb-10">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid lg:grid-cols-[1.2fr_2fr] gap-14">
+      <div data-reveal>
+        <p id="ft-brand" class="serif italic font-semibold text-4xl leading-none"></p>
+        <p id="ft-sub" class="mono text-[.68rem] tracking-[.22em] t-ouro mt-3"></p>
+        <p id="ft-sign" class="serif italic text-2xl mt-8 claro-70 max-w-xs leading-snug"></p>
       </div>
-      <div className="flex flex-wrap gap-2 mb-16">${CATS.map(c=>html`<button key=${c} className=${'btn '+(c===cat?'b-w':'')} onClick=${()=>setCat(c)}>${c}</button>`)}</div>
-      <div className="wall grid sm:grid-cols-2 lg:grid-cols-3 gap-x-14 gap-y-20 items-end">
-        ${list.map((a,k)=>html`<div key=${a.id} className="slot flex flex-col items-center" style=${{marginTop:k%2?44:0}}>
-          <div className="spotlight flex justify-center w-full">
-            <${Frame} a=${a} cls=${leap===a.id?'leap':''} tabIndex="0" role="button" aria-label=${'Abrir '+a.title} style=${{width:'min(100%,285px)',height:H[a.id-1]*0.82}}
-              onKeyDown=${e=>e.key==='Enter'&&click(a)} onClick=${()=>click(a)}
-              onMouseMove=${e=>tilt(e,18,20)}
-              onMouseLeave=${untilt}/>
-          </div>
-          <div className="plaque mt-7 px-5 py-3.5 text-center text-xs" style=${{minWidth:'min(230px,100%)'}}>
-            <div className="serif italic text-xl" style=${{color:'#F5EFE6'}}>${a.title}</div>
-            <div className="mt-0.5 uppercase tracking-[.16em] text-[10px]" style=${{color:'#C5A880'}}>${a.artist}</div>
-            <div className="opacity-65 mt-1.5 pt-1.5" style=${{borderTop:'1px solid rgba(197,168,128,.2)'}}>${a.dimensions} · ${brl(a.price)}</div>
-          </div>
-        </div>`)}
+      <div id="ft-blocks" class="grid sm:grid-cols-3 gap-8"></div>
+    </div>
+    <div class="rule my-12"></div>
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <div id="ft-contacts" class="flex flex-wrap gap-x-8 gap-y-3 text-sm"></div>
+      <p id="ft-legal" class="mono text-[.64rem] claro-70 max-w-md"></p>
+    </div>
+    <p id="ft-copy" class="mono text-[.64rem] tracking-[.14em] mt-8 opacity-50"></p>
+  </div>
+</footer>
+
+<!-- ============ LIGHTBOX DE INSPEÇÃO ============ -->
+<div id="lb" class="hidden fixed inset-0 z-[999] bg-carvao t-claro" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+  <div class="h-full w-full grid lg:grid-cols-[1.35fr_1fr]">
+    <div class="relative h-[46svh] lg:h-full">
+      <div id="lb-stage" class="absolute inset-0 flex items-center justify-center p-6 sm:p-10">
+        <img id="lb-img" alt="" draggable="false">
+      </div>
+      <div class="absolute left-5 bottom-5 flex gap-3 z-10">
+        <button id="lb-zoom" class="btn btn-line-claro !py-2.5 !px-4 !text-[.78rem] bg-black/40 backdrop-blur" aria-pressed="false" aria-label="Ampliar para ver textura">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
+          <span id="lb-zoom-label">Ver textura</span>
+        </button>
       </div>
     </div>
-  </section>`;
-}
-
-function Carousel({arts,likedSet,onLike,onOpen}) {
-  const sorted=[...arts].sort((a,b)=>b.likes-a.likes);
-  const loopItems=[...sorted,...sorted];
-  return html`<section id="apreciadas" className="py-24 relative" style=${{background:'linear-gradient(180deg, #1E2317 0%, #141810 100%)',borderTop:'1px solid rgba(197,168,128,.25)',borderBottom:'1px solid rgba(197,168,128,.25)'}}>
-    <div className="px-6 md:px-16 mb-12 flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <p className="eyebrow mb-3">Vitrine de Destaques · Fluxo Contínuo</p>
-        <h2 className="serif text-4xl md:text-6xl leading-[1.04]">Mais apreciadas <i>pelo público</i></h2>
-      </div>
-      <p className="text-xs opacity-70">Passe o cursor sobre uma obra para pausar e apreciar</p>
+    <div class="relative overflow-y-auto p-7 sm:p-10 lg:p-12 border-t lg:border-t-0 lg:border-l border-white/10">
+      <button id="lb-close" class="mono text-[.7rem] tracking-[.2em] px-3.5 py-2 rounded-full border border-white/25 absolute right-5 top-5">FECHAR ✕</button>
+      <span id="lb-tag" class="tag mt-8 lg:mt-6"></span>
+      <h3 id="lb-title" class="serif font-bold text-4xl sm:text-5xl leading-[1.02] mt-4"></h3>
+      <p id="lb-artist" class="serif italic text-2xl t-ouro mt-2"></p>
+      <div class="rule my-7"></div>
+      <dl id="lb-spec" class="spec mono"></dl>
+      <p class="mono text-[.64rem] tracking-[.22em] t-ouro mt-9 mb-3">HISTÓRIA DA PEÇA</p>
+      <p id="lb-story" class="claro-70 font-light leading-relaxed"></p>
+      <a id="lb-wa" target="_blank" rel="noopener" class="btn btn-ouro mt-9 w-full justify-center">Consultar Obra com a Curadora</a>
+      <p class="mono text-[.62rem] claro-70 mt-4 text-center">Acompanha certificado de autenticidade assinado.</p>
     </div>
-    <div className="marquee-wrap py-2">
-      <div className="marquee-track px-6">
-        ${loopItems.map((a,idx)=>{
-          const rank = idx % sorted.length;
-          return html`<article key=${a.id+'-'+idx} className="shrink-0 p-6 flex flex-col justify-between transition-transform duration-500 hover:-translate-y-1.5" style=${{width:310,background:'linear-gradient(180deg,#2A1D16 0%,#17100B 100%)',border:'1px solid rgba(197,168,128,.35)',boxShadow:'0 22px 44px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,236,200,.08)'}}>
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                ${rank<3?html`<span className="text-[10px] uppercase tracking-[.18em] px-2.5 py-1" style=${{background:'linear-gradient(180deg,#7E2D22,#5B1D15)',color:'#F5EFE6',border:'1px solid rgba(197,168,128,.4)'}}>Escolha do Público</span>`:html`<span className="text-xs opacity-60">Acervo Curado</span>`}
-                <span className="text-xs" style=${{color:'#C5A880'}}>${brl(a.price)}</span>
-              </div>
-              <div style=${{height:250}} className="cursor-pointer mb-5" onClick=${()=>onOpen(a.id)}>
-                <${Frame} a=${a} style=${{width:'100%',height:'100%',boxShadow:'0 14px 26px rgba(0,0,0,.7)'}} onMouseMove=${e=>tilt(e,8,8)} onMouseLeave=${untilt}/>
-              </div>
-              <h3 className="serif italic text-2xl">${a.title}</h3>
-              <p className="text-[11px] uppercase tracking-[.18em] mt-1 mb-4" style=${{color:'#C5A880'}}>${a.artist}</p>
-            </div>
-            <${Like} a=${a} liked=${likedSet.has(a.id)} onLike=${onLike}/>
-          </article>`;
-        })}
-      </div>
-    </div>
-  </section>`;
-}
+  </div>
+</div>
 
-function Cart({arts,cart,onRemove,onClose}) {
-  const items=cart.map(id=>arts.find(a=>a.id===id)),total=items.reduce((s,a)=>s+a.price,0);
-  const [nome,setNome]=useState(''),[bairro,setBairro]=useState(''),[paid,setPaid]=useState(false),[err,setErr]=useState(false);
-  const ok=()=>{ if(!items.length||!nome.trim()||!bairro.trim()){setErr(true);return false} setErr(false);return true };
-  const zap=()=>{ if(!ok())return; const m=`Olá, Amanda! Gostaria de finalizar meu pedido na ARTHEIROS.\n\nNome: ${nome}\nRegião: ${bairro}\n\nObras:\n${items.map(a=>`• ${a.title} — ${a.artist} (${brl(a.price)})`).join('\n')}\n\nTotal: ${brl(total)}`; window.open(`https://wa.me/${GALLERY_CONFIG.whatsapp}?text=${encodeURIComponent(m)}`,'_blank') };
-  const pay=()=>{ if(!ok())return; setPaid(true); setTimeout(()=>window.open(GALLERY_CONFIG.paymentLink,'_blank'),1500) };
-  return html`<div className="fixed inset-0 z-[110]" style=${{background:'rgba(8,5,3,.78)',backdropFilter:'blur(5px)'}} onClick=${onClose}>
-    <aside className="fade absolute right-0 top-0 bottom-0 w-full max-w-md flex flex-col p-6 overflow-auto" style=${{background:'linear-gradient(180deg,#1D130E,#150D09)',color:'#F5EFE6',borderLeft:'1px solid rgba(197,168,128,.4)',boxShadow:'-24px 0 60px rgba(0,0,0,.6)',paddingTop:'calc(1.5rem + env(safe-area-inset-top,0px))',paddingBottom:'calc(1.5rem + env(safe-area-inset-bottom,0px))'}} onClick=${e=>e.stopPropagation()}>
-      <div className="flex justify-between items-center mb-5 pb-3" style=${{borderBottom:'1px solid rgba(197,168,128,.25)'}}><h2 className="serif italic text-3xl">Sua sacola</h2><button aria-label="Fechar" onClick=${onClose}><${Ic} d=${P.x}/></button></div>
-      ${!items.length&&html`<p className="text-sm opacity-70 py-10">Sua sacola está vazia. Selecione uma obra na parede da galeria para adquirir.</p>`}
-      ${items.map(a=>html`<div key=${a.id} className="flex gap-3 py-3.5" style=${{borderBottom:'1px solid rgba(197,168,128,.2)'}}>
-        <img src=${a.imageUrl} alt="" style=${{width:62,height:76,objectFit:'cover',border:'2px solid #C5A880'}}/>
-        <div className="flex-1"><div className="serif italic text-xl">${a.title}</div><div className="text-[11px] uppercase tracking-[.16em]" style=${{color:'#C5A880'}}>${a.artist}</div><div className="text-sm mt-1">${brl(a.price)}</div></div>
-        <button className="text-xs underline opacity-75 hover:opacity-100 self-start" onClick=${()=>onRemove(a.id)}>Remover</button>
-      </div>`)}
-      <div className="flex justify-between py-5 serif text-2xl"><span>Total</span><b style=${{color:'#C5A880'}}>${brl(total)}</b></div>
-      <div className="grid gap-3 mb-4"><input placeholder="Seu nome completo" value=${nome} onInput=${e=>setNome(e.target.value)} aria-label="Seu nome"/><input placeholder="Bairro / Cidade (ex: Cambuí, Campinas - SP)" value=${bairro} onInput=${e=>setBairro(e.target.value)} aria-label="Bairro e cidade"/></div>
-      ${err&&html`<p className="text-xs mb-3" style=${{color:'#E8897B'}}>Adicione pelo menos uma obra e preencha seu nome e bairro para continuar.</p>`}
-      ${paid&&html`<p className="text-xs mb-3 p-3" style=${{background:'#2A3020',border:'1px solid #C5A880'}}>Pedido registrado. Abrindo o ambiente de pagamento em instantes…</p>`}
-      <div className="grid gap-3 mt-auto pt-3"><button className="btn b-w" onClick=${zap}>Finalizar pedido via WhatsApp</button><button className="btn b-o" onClick=${pay}>Pagar online (Pix / Cartão)</button></div>
-    </aside>
-  </div>`;
-}
+<!-- ============ RENDER (dados → DOM) ============ -->
+<script>
+(function(){
+  'use strict';
+  const C = window.GALERIA_CONFIG;
+  if(!C){ document.body.insertAdjacentHTML('afterbegin','<p style="padding:2rem">config.js não encontrado.</p>'); return; }
 
-function Submit({onClose}) {
-  const [f,setF]=useState({n:'',l:'',m:''}),[sent,setSent]=useState(false);
-  const set=k=>e=>setF({...f,[k]:e.target.value});
-  const send=()=>{ if(!f.n.trim())return; window.open(`https://wa.me/${GALLERY_CONFIG.whatsapp}?text=${encodeURIComponent(`Olá! Sou ${f.n} e gostaria de submeter meu portfólio à ARTHEIROS.\nPortfólio: ${f.l}\n${f.m}`)}`,'_blank'); setSent(true) };
-  return html`<div className="overlay" onClick=${onClose}><div className="pop w-full max-w-md p-8" style=${{background:'linear-gradient(180deg,#1F1510,#170E0A)',color:'#F5EFE6',border:'1px solid rgba(197,168,128,.45)',boxShadow:'0 40px 100px rgba(0,0,0,.9)',perspective:1200}} onClick=${e=>e.stopPropagation()}>
-    <div className="flex justify-between"><h2 className="serif italic text-3xl">Submeter portfólio</h2><button aria-label="Fechar" onClick=${onClose}><${Ic} d=${P.x}/></button></div>
-    ${sent?html`<p className="mt-6 text-sm leading-relaxed">Portfólio encaminhado. A curadoria de ${GALLERY_CONFIG.curator} responde pelo WhatsApp em até 7 dias.</p>`:html`<div className="grid gap-3 mt-6"><input placeholder="Seu nome ou coletivo" value=${f.n} onInput=${set('n')} aria-label="Seu nome"/><input placeholder="Link do portfólio ou Instagram" value=${f.l} onInput=${set('l')} aria-label="Link do portfólio"/><textarea rows="3" placeholder="Conte brevemente sobre sua técnica e processo" value=${f.m} onInput=${set('m')} aria-label="Mensagem"/><button className="btn b-w" onClick=${send}>Enviar para a curadoria</button></div>`}
-  </div></div>`;
-}
+  /* ---- helpers ---- */
+  const $  = (s,r=document)=>r.querySelector(s);
+  const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+  const esc = s=>String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const wa  = msg=>`https://wa.me/${C.contato.whatsapp}?text=${encodeURIComponent(msg)}`;
+  const fill = (tpl,o)=>tpl.replace(/\{(\w+)\}/g,(_,k)=>o[k]||'');
+  const obra   = id=>C.obras.find(o=>o.id===id);
+  const artista= id=>C.artistas.find(a=>a.id===id);
+  const set = (sel,html)=>{ const el=$(sel); if(el) el.innerHTML=html; return el; };
+  const txt = (sel,t)=>{ const el=$(sel); if(el) el.textContent=t; return el; };
+  const href= (sel,h)=>{ const el=$(sel); if(el) el.setAttribute('href',h); return el; };
 
-function App() {
-  const [arts,setArts]=useState(ARTWORKS),[liked,setLiked]=useState(new Set()),[cart,setCart]=useState([]);
-  const [tour,setTour]=useState(false),[open,setOpen]=useState(null),[bag,setBag]=useState(false),[sub,setSub]=useState(false);
-  const [hallOpen,setHallOpen]=useState(false);
+  /* ---- cores da config → variáveis CSS ---- */
+  const k = C.cores, root = document.documentElement.style;
+  root.setProperty('--verde',k.verde);  root.setProperty('--papel',k.papel);   root.setProperty('--carvao',k.carvao);
+  root.setProperty('--ouro',k.ouro);    root.setProperty('--terra',k.terracota);
+  root.setProperty('--tclaro',k.textoClaro); root.setProperty('--tescuro',k.textoEscuro);
+  document.title = C.marca.nome + ' — Arte autoral e independente';
+  const meta = document.querySelector('meta[name="description"]'); if(meta) meta.content = C.marca.descricaoMeta;
 
-  const like=id=>{const had=liked.has(id);setLiked(s=>{const n=new Set(s);had?n.delete(id):n.add(id);return n});setArts(l=>l.map(a=>a.id===id?{...a,likes:a.likes+(had?-1:1)}:a))};
-  const toggle=id=>setCart(c=>c.includes(id)?c.filter(x=>x!==id):[...c,id]);
-  const add=id=>setCart(c=>c.includes(id)?c:[...c,id]);
-  const cur=arts.find(a=>a.id===open);
+  /* ---- imagens com fallback em dois estágios (local → Unsplash → placeholder SVG) ---- */
+  /* ---- ilustrações autorais de fallback (geradas, estáticas, sem filtro de ruído) ---- */
+  const PAL={
+    "Artes Visuais":["#B8924A","#8C3B2B","#1d3a4a","#e8d9b5","#c46a3a"],
+    "Cerâmica":["#d9cdb4","#8a5a3b","#2b2b28","#b8924a","#efe7d6"],
+    "Fotografia":["#cfd8d3","#5f7a6e","#2a3d34","#e9ece6","#8aa296"],
+    "Arte e Natureza":["#3b4a2f","#8a6a3a","#d8c79c","#5c3a22","#a3b07a"],
+    "Artesanato Autoral":["#8C3B2B","#c9573a","#e8c9a0","#3a2a22","#B8924A"],
+    "Colecionáveis":["#14241E","#B8924A","#e8d9b5","#8C3B2B","#2f4a3d"],
+    "retrato":["#2a3d34","#B8924A","#e8d9b5","#8C3B2B","#14241E"]
+  };
+  const rng = s=>{ let h=1779033703^s.length; for(let i=0;i<s.length;i++){ h=Math.imul(h^s.charCodeAt(i),3432918353); h=h<<13|h>>>19; } return ()=>{ h=Math.imul(h^h>>>16,2246822507); h=Math.imul(h^h>>>13,3266489909); h^=h>>>16; return (h>>>0)/4294967296; }; };
+  const artCache={};
+  function artSVG(seed,cat){
+    const key=seed+'|'+cat; if(artCache[key]) return artCache[key];
+    const r=rng(String(seed)), p=PAL[cat]||PAL["Artes Visuais"], pick=()=>p[Math.floor(r()*p.length)];
+    let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice"><defs><filter id="b"><feGaussianBlur stdDeviation="14"/></filter><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${p[2]}"/><stop offset="1" stop-color="${p[0]}"/></linearGradient></defs><rect width="800" height="1000" fill="url(#bg)"/>`;
+    if(cat==="Cerâmica"){
+      s+=`<rect width="800" height="1000" fill="${p[4]}"/><ellipse cx="400" cy="930" rx="230" ry="26" fill="#000" opacity=".25" filter="url(#b)"/><path d="M330,230 C330,190 345,170 345,150 L455,150 C455,170 470,190 470,230 C690,320 690,760 560,880 C500,930 300,930 240,880 C110,760 110,320 330,230Z" fill="${p[1]}"/><path d="M200,520 C300,470 520,560 640,500 C650,620 620,760 560,880 C500,930 300,930 240,880 C190,820 170,650 200,520Z" fill="${p[3]}" opacity=".55"/><ellipse cx="400" cy="150" rx="55" ry="12" fill="${p[2]}"/>`;
+    } else if(cat==="Fotografia"){
+      for(let i=0;i<6;i++){ const y=300+i*100, c=i%2?p[1]:p[2]; s+=`<path d="M0,${y} `; for(let x=0;x<=800;x+=100) s+=`L${x},${y-60-r()*110} `; s+=`L800,1000 L0,1000Z" fill="${c}" opacity="${.35+i*.12}"/>`; }
+      s+=`<circle cx="${200+r()*400}" cy="200" r="70" fill="#fff" opacity=".5" filter="url(#b)"/>`;
+    } else if(cat==="Arte e Natureza"){
+      for(let i=0;i<9;i++){ s+=`<path d="M${400+(r()-.5)*40},1000 C${200+r()*400},${700-r()*200} ${200+r()*400},${400-r()*150} ${150+r()*500},${120+r()*200}" stroke="${pick()}" stroke-width="${8+r()*26}" fill="none" stroke-linecap="round" opacity=".85"/>`; }
+    } else if(cat==="Artesanato Autoral"){
+      for(let y=0;y<1000;y+=40){ s+=`<rect x="0" y="${y}" width="800" height="40" fill="${pick()}" opacity="${.55+r()*.4}"/>`; }
+      for(let i=0;i<14;i++){ s+=`<rect x="${r()*800}" y="0" width="${6+r()*26}" height="1000" fill="${pick()}" opacity=".25"/>`; }
+    } else if(cat==="Colecionáveis"){
+      s+=`<rect width="800" height="1000" fill="${p[0]}"/><ellipse cx="400" cy="860" rx="190" ry="24" fill="#000" opacity=".35" filter="url(#b)"/><path d="M250,820 C220,600 300,420 400,360 C500,300 580,420 560,520 C540,640 610,740 560,820Z" fill="${p[1]}"/><circle cx="470" cy="470" r="14" fill="${p[0]}"/><path d="M290,800 C280,640 330,520 400,470" stroke="${p[2]}" stroke-width="6" fill="none" opacity=".6"/>`;
+    } else if(cat==="retrato"){
+      s+=`<circle cx="${300+r()*200}" cy="260" r="260" fill="${p[1]}" opacity=".25" filter="url(#b)"/><path d="M110,1000 C110,760 260,700 400,700 C540,700 690,760 690,1000Z" fill="${p[3]}"/><rect x="350" y="590" width="100" height="130" fill="#d9b49a"/><ellipse cx="400" cy="450" rx="130" ry="165" fill="#e2bfa6"/><path d="M265,430 C250,250 400,230 470,260 C550,290 545,400 535,450 C520,360 440,320 380,330 C320,340 280,380 265,430Z" fill="${p[4]}"/>`;
+    } else {
+      for(let i=0;i<7;i++){ s+=`<ellipse cx="${r()*800}" cy="${r()*1000}" rx="${120+r()*260}" ry="${80+r()*220}" fill="${pick()}" opacity=".78" transform="rotate(${r()*180} 400 500)" filter="url(#b)"/>`; }
+      for(let i=0;i<5;i++){ s+=`<path d="M${r()*800},${r()*1000} Q${r()*800},${r()*1000} ${r()*800},${r()*1000}" stroke="${pick()}" stroke-width="${3+r()*8}" fill="none" opacity=".8"/>`; }
+    }
+    s+='</svg>';
+    return artCache[key]='data:image/svg+xml;utf8,'+encodeURIComponent(s);
+  }
+  /* local (./img) → Unsplash → ilustração autoral */
+  window.imgErr = function(el){
+    const st = +(el.dataset.st||0);
+    if(st===0 && el.dataset.fb){ el.dataset.st=1; el.src=el.dataset.fb; }
+    else { el.dataset.st=2; el.onerror=null; el.src=artSVG(el.dataset.seed||el.dataset.alt||'obra', el.dataset.cat||'Artes Visuais'); }
+  };
+  const img = (src,fb,alt,eager,seed,cat)=>`<img src="${esc(src)}" data-fb="${esc(fb||'')}" data-alt="${esc(alt)}" data-seed="${esc(seed||alt)}" data-cat="${esc(cat||'')}" alt="${esc(alt)}" ${eager?'':'loading="lazy"'} decoding="async" onerror="imgErr(this)">`;
 
-  const enterExhibition = (e) => {
-    if (e) e.preventDefault();
-    const el = document.getElementById('parede');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => setHallOpen(true), 400);
+  /* ---- moldura realista ---- */
+  const frame = (o,{eager}={})=>`<div class="frame"><div class="mat"><div class="art" style="aspect-ratio:${esc(o.ratio||'4 / 5')}">${img(o.img,o.fallback,o.titulo,eager,o.id,o.categoria)}</div></div></div>`;
+  const tagHTML = t=>{
+    if(!t) return '';
+    const cls = /ÚNICA/i.test(t)?'tag-unica':(/LIMITADA/i.test(t)?'tag-limitada':'tag-destaque');
+    return `<span class="tag ${cls}">${esc(t)}</span>`;
   };
 
-  const links=[["Exposição","#hero"],["Mais Apreciadas","#apreciadas"],["Acervo na Parede","#parede"],["Curadoria","#curadoria"]];
-  return html`<div>
-    <header><div className="flex items-center justify-between px-4 md:px-10 py-3.5">
-      <a href="#hero" className="flex items-center gap-3"><${Logo}/><span className="hidden sm:block leading-tight"><span className="serif text-xl tracking-[.3em] block" style=${{color:'#F5EFE6'}}>ARTHEIROS</span><span className="text-[9px] tracking-[.26em]" style=${{color:'#C5A880'}}>GALERIA DE ARTE AUTORAL</span></span></a>
-      <nav className="hidden lg:flex gap-8 text-[11px] uppercase tracking-[.18em]">${links.map(([t,h])=>html`<a key=${h} href=${h} onClick=${h==='#parede'?enterExhibition:undefined} className="hover:text-[#C5A880] transition-colors">${t}</a>`)}</nav>
-      <div className="flex items-center gap-3"><button className="btn hidden md:block" onClick=${()=>setTour(true)}>Iniciar visita guiada</button>
-        <button className="relative p-2 hover:text-[#C5A880]" aria-label=${'Sacola, '+cart.length+' obras'} onClick=${()=>setBag(true)}><${Ic} d=${P.bag} s=${24}/><span className="absolute -top-0.5 -right-0.5 text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-semibold" style=${{background:'#6B241B',color:'#F5EFE6',border:'1px solid #C5A880'}}>${cart.length}</span></button></div></div></header>
+  /* ---- NAV ---- */
+  txt('#nav-brand', C.marca.curta);
+  set('#nav-links', C.nav.links.map(l=>`<a class="nav-link uppercase tracking-wider text-xs font-light" href="${esc(l.href)}">${esc(l.texto)}</a>`).join(''));
+  const navCta = $('#nav-cta'); navCta.textContent = C.nav.cta.texto; navCta.href = C.nav.cta.href;
+  set('#drawer-nav', C.nav.gaveta.map(l=>`<a class="drawer-link" href="${esc(l.href)}" data-close-drawer><span class="mono text-xs t-ouro tracking-[.2em]">${esc(l.n)}</span><span>${esc(l.texto)}</span></a>`).join(''));
+  href('#drawer-wa', wa(C.mensagens.geral));
+  txt('#drawer-sub', C.contato.whatsappExibicao+' · '+C.contato.email);
+  $$('.rd').forEach(d=>{ d.querySelector('.rd-plaque').textContent = (C.salas&&C.salas[d.dataset.sala])||''; });
 
-    <!-- HERO COM VÍDEO DE FUNDO ENTRANDO NA GALERIA (./assets/entrada-galeria.mp4) -->
-    <section id="hero" className="relative min-h-screen grid lg:grid-cols-12 gap-10 items-center px-6 md:px-16 pt-28 pb-16 overflow-hidden">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        poster=${GALLERY_CONFIG.heroImage}
-        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
-        style=${{opacity:.78,filter:'contrast(1.08) saturate(.95) sepia(.12)'}}
-      >
-        <source src=${GALLERY_CONFIG.heroVideo} type="video/mp4"/>
-      </video>
-      <!-- overlay cinematográfico: leitura à esquerda, movimento preservado à direita, vinheta e fusão com a página -->
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style=${{background:'linear-gradient(95deg, rgba(16,10,7,.9) 0%, rgba(16,10,7,.66) 38%, rgba(16,10,7,.22) 72%, rgba(16,10,7,.34) 100%), radial-gradient(ellipse 90% 80% at 50% 45%, transparent 40%, rgba(8,4,3,.62) 100%), linear-gradient(180deg, rgba(16,10,7,.55) 0%, transparent 22%, transparent 70%, #140D09 100%)'}}
-      ></div>
-      <div className="absolute inset-0 z-0 pointer-events-none" style=${{background:'radial-gradient(ellipse 50% 40% at 78% 8%, rgba(255,226,180,.16), transparent 70%)',mixBlendMode:'screen'}}></div>
+  /* ---- HERO ---- */
+  const H = C.hero, hw = obra(H.obraId) || C.obras[0], ha = artista(hw.artistaId);
+  $('#hero-tag span:last-child').textContent = H.etiqueta;
+  set('#hero-title', H.tituloHtml);
+  txt('#hero-sub', H.subtitulo);
+  const c1=$('#hero-cta1'); c1.textContent=H.ctaPrimario.texto; c1.href=H.ctaPrimario.href;
+  const c2=$('#hero-cta2'); c2.textContent=H.ctaSecundario.texto; c2.href=H.ctaSecundario.href;
+  const hf=$('#hero-frame'); hf.innerHTML = frame(hw,{eager:true}); hf.dataset.open = hw.id; hf.setAttribute('aria-label','Inspecionar '+hw.titulo);
+  txt('#hero-plaque-title', hw.titulo);
+  txt('#hero-plaque-artist', ha.nome);
+  txt('#hero-plaque-meta', `${hw.tecnica} · ${hw.ano}`);
+  $('#seal-text textPath').textContent = H.selo + ' · ';
 
-      <div className="relative z-10 lg:col-span-7 reveal">
-        <p className="eyebrow mb-5">Exposição Inaugural · ${GALLERY_CONFIG.city}</p>
-        <h1 className="serif text-5xl md:text-7xl xl:text-8xl leading-[1.02]" style=${{textShadow:'0 2px 30px rgba(8,4,3,.75), 0 1px 2px rgba(0,0,0,.6)'}}>Uma galeria que aproxima <i style=${{color:'#D2B68C'}}>artistas</i> e pessoas por meio da arte.</h1>
-        <p className="mt-8 max-w-xl leading-relaxed" style=${{opacity:.94,textShadow:'0 1px 14px rgba(8,4,3,.85)'}}>Em Campinas, a jornalista e curadora ${GALLERY_CONFIG.curator} seleciona obras autorais de artistas da região — cada peça apresentada em sala com sua história, processo criativo e certificado de autenticidade.</p>
-        <div className="flex flex-wrap gap-4 mt-10">
-          <button className="btn b-w" onClick=${()=>setTour(true)}>Iniciar exposição guiada</button>
-          <a href="#parede" onClick=${enterExhibition} className="btn b-o">Explorar acervo na parede</a>
+  /* ---- DESTAQUES ---- */
+  const D = C.destaques;
+  txt('#dest-tag', D.etiqueta); set('#dest-title', D.tituloHtml); txt('#dest-sub', D.subtitulo);
+  const OFF = ['','lg:mt-24','lg:mt-8','lg:mt-36'];
+  const SPD = [12,-16,20,-10];
+  set('#dest-grid', D.obraIds.map(obra).filter(Boolean).map((o,i)=>{
+    const a = artista(o.artistaId);
+    return `<article class="feat ${OFF[i%4]}" data-par="${SPD[i%4]}">
+      <div class="clip-wrap openable" data-open="${esc(o.id)}" role="button" tabindex="0" aria-label="Inspecionar ${esc(o.titulo)}">${frame(o)}</div>
+      <div data-reveal class="mt-7">
+        ${tagHTML(o.tag)}
+        <h3 class="serif font-bold text-[1.9rem] leading-[1.05] mt-3">${esc(o.titulo)}</h3>
+        <p class="serif italic text-xl t-terra mt-1">${esc(a.nome)}</p>
+        <dl class="mono text-[.7rem] mt-4 space-y-1 escuro-70">
+          <div><dt class="inline opacity-60">Técnica · </dt><dd class="inline">${esc(o.tecnica)}</dd></div>
+          <div><dt class="inline opacity-60">Dimensões · </dt><dd class="inline">${esc(o.dimensoes)}</dd></div>
+          <div><dt class="inline opacity-60">Ano · </dt><dd class="inline">${esc(o.ano)}</dd></div>
+        </dl>
+        <p class="mono text-lg font-bold mt-4">${esc(o.valor)}</p>
+        <div class="mt-4 flex flex-wrap gap-2.5">
+          <button class="btn btn-line-escuro !py-2.5 !px-4 !text-[.78rem]" data-open="${esc(o.id)}">Inspecionar</button>
+          <a class="btn btn-terra !py-2.5 !px-4 !text-[.78rem]" target="_blank" rel="noopener" href="${wa(fill(C.mensagens.consulta,{obra:o.titulo,artista:a.nome}))}">Consultar</a>
         </div>
       </div>
+    </article>`;
+  }).join(''));
 
-      <div className="relative z-10 lg:col-span-5 flex flex-col items-center justify-center spotlight">
-        <div className="frame f-wood w-full max-w-[390px] aspect-[4/5]" style=${{cursor:'pointer'}} onClick=${()=>setTour(true)}
-          onMouseMove=${e=>tilt(e,12,14)}
-          onMouseLeave=${untilt}>
-          <div style=${{width:'100%',height:'100%',overflow:'hidden',background:'#120D0A',position:'relative'}}>
-            <img src=${GALLERY_CONFIG.heroImage} alt="Entrada da Exposição Artheiros" onError=${e=>{e.currentTarget.onerror=null;e.currentTarget.src=fallbackArt("Exposição Artheiros")}}/>
-            <div style=${{position:'absolute',inset:0,background:'linear-gradient(180deg, transparent 58%, rgba(18,12,9,.88) 100%)',display:'flex',alignItems:'flex-end',padding:'1.25rem'}}>
-              <span className="text-[11px] uppercase tracking-[.18em]" style=${{color:'#C5A880'}}>Clique para iniciar a visita guiada →</span>
+  /* ---- ACERVO ---- */
+  const A = C.acervo;
+  txt('#acv-tag', A.etiqueta); set('#acv-title', A.tituloHtml); txt('#acv-sub', A.subtitulo);
+  let cat = 'Todas', openId = null;
+
+  set('#filters', C.categorias.map(c=>`<button class="pill" type="button" data-cat="${esc(c)}" aria-pressed="${c==='Todas'}">${esc(c)}</button>`).join(''));
+
+  function miniWork(o){
+    return `<div class="group">
+      <div class="openable" data-open="${esc(o.id)}" role="button" tabindex="0" aria-label="Inspecionar ${esc(o.titulo)}">${frame(o)}</div>
+      <div class="mt-4">
+        ${tagHTML(o.tag)}
+        <h4 class="serif font-bold text-xl leading-tight mt-2">${esc(o.titulo)}</h4>
+        <p class="mono text-[.66rem] escuro-70 mt-1.5">${esc(o.tecnica)}<br>${esc(o.dimensoes)} · ${esc(o.ano)}</p>
+        <p class="mono font-bold mt-2">${esc(o.valor)}</p>
+      </div>
+    </div>`;
+  }
+
+  function renderAcervo(){
+    const wrap = $('#artistas-list');
+    const groups = C.artistas.map(a=>({a, works:C.obras.filter(o=>o.artistaId===a.id && (cat==='Todas'||o.categoria===cat))})).filter(g=>g.works.length);
+    if(!groups.some(g=>g.a.id===openId)) openId = groups[0] ? groups[0].a.id : null;
+    const total = groups.reduce((n,g)=>n+g.works.length,0);
+    txt('#acv-count', `${String(total).padStart(2,'0')} ${total===1?'OBRA':'OBRAS'} · ${String(groups.length).padStart(2,'0')} ${groups.length===1?'ARTISTA':'ARTISTAS'}`);
+    if(!groups.length){ wrap.innerHTML = '<p class="py-12 escuro-70">Nenhuma obra nesta categoria no momento.</p>'; return; }
+    wrap.innerHTML = groups.map(({a,works},i)=>`
+      <div class="acc-item ${a.id===openId?'open':''}" data-reveal style="--d:${i*.06}s" data-artist="${esc(a.id)}">
+        <button class="w-full flex items-center gap-4 sm:gap-6 py-6 text-left" type="button" data-acc="${esc(a.id)}" aria-expanded="${a.id===openId}" aria-controls="acc-${esc(a.id)}">
+          <span class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden ring-2 ring-offset-2 ring-offset-[#F5F2EB]" style="--tw-ring-color:var(--ouro)">${img(a.foto,a.fallback,a.nome,false,a.id,'retrato')}</span>
+          <span class="flex-1 min-w-0">
+            <span class="block serif font-bold text-2xl sm:text-4xl leading-tight">${esc(a.nome)}</span>
+            <span class="block mono text-[.66rem] tracking-[.16em] uppercase mt-1 t-terra">${esc(a.disciplina)} · ${esc(a.cidade)}</span>
+          </span>
+          <span class="mono text-[.7rem] escuro-70 hidden sm:block">${works.length} ${works.length===1?'obra':'obras'}</span>
+          <span class="acc-chevron serif text-4xl leading-none t-terra" aria-hidden="true">+</span>
+        </button>
+        <div class="acc-body" id="acc-${esc(a.id)}" role="region"><div>
+          <div class="pb-12 pt-2 grid lg:grid-cols-[.9fr_1.6fr] gap-10 lg:gap-14">
+            <div>
+              <p class="mono text-[.64rem] tracking-[.22em] t-terra mb-3">BIOGRAFIA</p>
+              <p class="leading-relaxed escuro-70">${esc(a.bio)}</p>
+              <p class="mono text-[.64rem] tracking-[.22em] t-terra mt-7 mb-3">PROCESSO CRIATIVO</p>
+              <p class="leading-relaxed escuro-70">${esc(a.processo)}</p>
             </div>
+            <div class="grid sm:grid-cols-2 gap-x-8 gap-y-12">${works.map(miniWork).join('')}</div>
           </div>
-        </div>
-        <div className="plaque mt-6 px-5 py-2.5 text-center text-xs">
-          <span className="serif italic text-base" style=${{color:'#F5EFE6'}}>${GALLERY_CONFIG.heroCaption}</span>
-        </div>
-      </div>
-    </section>
+        </div></div>
+      </div>`).join('');
+    if(window.__observeReveal) window.__observeReveal(wrap);
+  }
+  renderAcervo();
 
-    <${Carousel} arts=${arts} likedSet=${liked} onLike=${like} onOpen=${setOpen}/>
-    <${Wall} arts=${arts} onOpen=${setOpen} hallOpen=${hallOpen} onOpenHall=${()=>setHallOpen(true)} onCloseHall=${()=>setHallOpen(false)}/>
+  $('#filters').addEventListener('click',e=>{
+    const b=e.target.closest('[data-cat]'); if(!b) return;
+    cat=b.dataset.cat;
+    $$('#filters .pill').forEach(p=>p.setAttribute('aria-pressed', p===b));
+    renderAcervo();
+    if(window.ScrollTrigger) setTimeout(()=>ScrollTrigger.refresh(),50);
+  });
+  $('#artistas-list').addEventListener('click',e=>{
+    const b=e.target.closest('[data-acc]'); if(!b) return;
+    const item=b.closest('.acc-item'), isOpen=item.classList.contains('open');
+    $$('#artistas-list .acc-item.open').forEach(i=>{ i.classList.remove('open'); i.querySelector('[data-acc]').setAttribute('aria-expanded','false'); });
+    if(!isOpen){ item.classList.add('open'); b.setAttribute('aria-expanded','true'); openId=item.dataset.artist; } else openId=null;
+    if(window.ScrollTrigger) setTimeout(()=>ScrollTrigger.refresh(),800);
+  });
 
-    <section id="curadoria" className="grid md:grid-cols-2" style=${{borderTop:'1px solid rgba(197,168,128,.25)'}}>
-      <div className="p-8 md:p-16" style=${{background:'linear-gradient(135deg,#2B1D15 0%,#1A110C 100%)',borderRight:'1px solid rgba(197,168,128,.2)'}}>
-        <p className="eyebrow mb-3">Direção Curatorial</p>
-        <h2 className="serif text-4xl md:text-6xl leading-[1.04]">Curadoria de <i style=${{color:'#C5A880'}}>${GALLERY_CONFIG.curator}</i></h2>
-        <p className="mt-6 leading-relaxed opacity-85">A Artheiros nasceu para dar rosto e voz a quem faz arte no interior paulista. Amanda visita os ateliês, escuta cada artista e escreve a história de cada obra, para que você leve para casa mais do que um objeto.</p>
-      </div>
-      <div className="p-8 md:p-16" style=${{background:'#130D09'}}>
-        <h3 className="serif italic text-3xl" style=${{color:'#C5A880'}}>Entrega e parceria</h3>
-        <p className="mt-4 leading-relaxed text-sm opacity-85">Em Campinas e região, entregamos em mãos, com a obra embalada e montada no seu espaço se desejar. Para o resto do Brasil, enviamos com seguro e embalagem técnica de museu.</p>
-        <p className="mt-3 leading-relaxed text-sm opacity-85">É artista e quer expor na Artheiros? Envie seu portfólio para avaliação da curadoria.</p>
-        <button className="btn b-w mt-7" onClick=${()=>setSub(true)}>Submeter portfólio como artista</button>
-      </div>
-    </section>
+  /* ---- CURADORIA ---- */
+  const Cu = C.curadora;
+  txt('#cur-tag', Cu.etiqueta); set('#cur-manifesto', Cu.manifestoHtml);
+  set('#cur-frame', frame({img:Cu.foto,fallback:Cu.fallback,titulo:Cu.nome,ratio:'4 / 5',id:'amanda-costa',categoria:'retrato'}));
+  txt('#cur-name', Cu.nome); txt('#cur-role', Cu.cargo);
+  set('#cur-paras', Cu.paragrafos.map((p,i)=>`<p data-reveal style="--d:${.1+i*.08}s">${esc(p)}</p>`).join(''));
+  set('#cur-pillars', Cu.pilares.map((p,i)=>`<div data-reveal style="--d:${i*.1}s" class="border-t b-ouro pt-4">
+      <p class="mono text-xs t-ouro tracking-[.2em]">${esc(p.n)}</p>
+      <h3 class="serif font-bold text-2xl mt-2">${esc(p.titulo)}</h3>
+      <p class="text-sm claro-70 font-light leading-relaxed mt-2">${esc(p.texto)}</p></div>`).join(''));
+  $('#cur-manifesto').classList.add('serif');
 
-    <footer className="px-6 md:px-16 py-8 text-xs flex flex-wrap justify-between items-center gap-3" style=${{borderTop:'1px solid rgba(197,168,128,.25)',background:'#0F0A07',color:'#C5A880',paddingBottom:'calc(2rem + env(safe-area-inset-bottom,0px))'}}>
-      <div className="flex items-center gap-3 tracking-[.08em]"><${Logo} s=${28}/>ARTHEIROS — Galeria de Arte Autoral · ${GALLERY_CONFIG.city}</div>
-      <span className="opacity-65">Curadoria assinada por ${GALLERY_CONFIG.curator}</span>
-    </footer>
+  /* ---- CHAMADA ---- */
+  const Ch = C.chamada;
+  txt('#cta-tag', Ch.etiqueta); set('#cta-title', Ch.tituloHtml); txt('#cta-sub', Ch.subtitulo);
+  $('#cta-title').querySelectorAll('em').forEach(e=>e.style.color='#E3C98F');
+  set('#cta-steps', Ch.passos.map((p,i)=>`<li data-reveal style="--d:${i*.1}s" class="relative p-7 rounded-sm" style="background:rgba(18,19,18,.28)">
+      <span class="mono text-sm tracking-[.2em]" style="color:#E3C98F">${esc(p.n)}</span>
+      <h3 class="serif font-bold text-[1.7rem] leading-tight mt-3">${esc(p.titulo)}</h3>
+      <p class="text-sm mt-3 leading-relaxed" style="opacity:.88">${esc(p.texto)}</p>
+      <span class="absolute left-0 top-0 h-full w-[3px]" style="background:var(--ouro)"></span></li>`).join(''));
+  $$('#cta-steps li').forEach(li=>li.style.background='rgba(18,19,18,.28)');
+  const cb=$('#cta-btn'); cb.textContent=Ch.cta; cb.href=wa(C.mensagens.submeter);
 
-    ${tour&&html`<${Tour} list=${arts.filter(a=>a.featuredInTour)} onClose=${()=>setTour(false)} onAdd=${add}/>`}
-    ${cur&&html`<${Room} a=${cur} onClose=${()=>setOpen(null)} liked=${liked.has(cur.id)} onLike=${like} inCart=${cart.includes(cur.id)} onAdd=${toggle}/>`}
-    ${bag&&html`<${Cart} arts=${arts} cart=${cart} onRemove=${toggle} onClose=${()=>setBag(false)}/>`}
-    ${sub&&html`<${Submit} onClose=${()=>setSub(false)}/>`}
-  </div>`;
-}
-ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
-</script></body></html>
+  /* ---- RODAPÉ ---- */
+  const R = C.rodape;
+  txt('#ft-brand', C.marca.nome); txt('#ft-sub', C.marca.subtitulo.toUpperCase()+' · '+C.contato.cidade.toUpperCase());
+  txt('#ft-sign', R.assinatura);
+  set('#ft-blocks', R.blocos.map((b,i)=>`<div data-reveal style="--d:${i*.08}s"><h4 class="mono text-[.68rem] tracking-[.18em] t-ouro uppercase">${esc(b.titulo)}</h4><p class="text-sm claro-70 font-light leading-relaxed mt-3">${esc(b.texto)}</p></div>`).join(''));
+  set('#ft-contacts', `
+    <a class="hover:text-[color:var(--ouro)] transition-colors" target="_blank" rel="noopener" href="${wa(C.mensagens.geral)}">WhatsApp · ${esc(C.contato.whatsappExibicao)}</a>
+    <a class="hover:text-[color:var(--ouro)] transition-colors" href="mailto:${esc(C.contato.email)}">${esc(C.contato.email)}</a>
+    <a class="hover:text-[color:var(--ouro)] transition-colors" target="_blank" rel="noopener" href="${esc(C.contato.instagramUrl)}">Instagram · ${esc(C.contato.instagram)}</a>`);
+  txt('#ft-legal', R.legal);
+  txt('#ft-copy', `© ${C.marca.ano} ${C.marca.nome.toUpperCase()}`);
+
+  /* ---- REVELAÇÃO data-reveal (IntersectionObserver) ---- */
+  document.documentElement.classList.add('rv');
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12, rootMargin:'0px 0px -6% 0px'}) : null;
+  window.__observeReveal = root=>{
+    $$('[data-reveal]:not(.in)',root||document).forEach(el=>{
+      if(io){ io.observe(el); } else el.classList.add('in');
+    });
+  };
+  window.__observeReveal();
+  setTimeout(()=>$$('[data-reveal]:not(.in)').forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top<innerHeight) el.classList.add('in'); }),600);
+
+  /* ---- GAVETA LATERAL ---- */
+  const drawer=$('#drawer'), dbg=$('#drawer-bg'), mb=$('#menu-btn');
+  const setDrawer = open=>{
+    drawer.classList.toggle('open',open); dbg.classList.toggle('open',open);
+    drawer.setAttribute('aria-hidden',!open); mb.setAttribute('aria-expanded',open);
+    if(open) $('#drawer-close').focus(); else mb.focus({preventScroll:true});
+  };
+  mb.addEventListener('click',()=>setDrawer(true));
+  $('#drawer-close').addEventListener('click',()=>setDrawer(false));
+  dbg.addEventListener('click',()=>setDrawer(false));
+  drawer.addEventListener('click',e=>{ if(e.target.closest('[data-close-drawer]')) setDrawer(false); });
+
+  /* ---- ÂNCORAS (compatível com Lenis) ---- */
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href^="#"]'); if(!a) return;
+    const id=a.getAttribute('href'); if(id.length<2) return;
+    const t=document.querySelector(id); if(!t) return;
+    e.preventDefault();
+    if(window.lenis && typeof window.lenis.scrollTo==='function') window.lenis.scrollTo(t,{offset:-70});
+    else t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  });
+
+  /* ---- LIGHTBOX ---- */
+  const lb=$('#lb'), stage=$('#lb-stage'), lbImg=$('#lb-img'); let lastFocus=null, closeT=null;
+  const setZoom = on=>{
+    stage.classList.toggle('zoomed',on); $('#lb-zoom').setAttribute('aria-pressed',on);
+    $('#lb-zoom-label').textContent = on?'Voltar':'Ver textura';
+    if(!on) lbImg.style.transformOrigin='center';
+  };
+  const origin = (x,y)=>{ const r=lbImg.getBoundingClientRect(); lbImg.style.transformOrigin = `${Math.min(100,Math.max(0,(x-r.left)/r.width*100))}% ${Math.min(100,Math.max(0,(y-r.top)/r.height*100))}%`; };
+  function openLB(id){
+    const o=obra(id); if(!o) return; const a=artista(o.artistaId);
+    clearTimeout(closeT);
+    lastFocus=document.activeElement;
+    setZoom(false);
+    lbImg.dataset.st='0'; lbImg.dataset.fb=o.fallback||''; lbImg.dataset.alt=o.titulo; lbImg.dataset.seed=o.id; lbImg.dataset.cat=o.categoria; lbImg.onerror=()=>imgErr(lbImg);
+    lbImg.alt=o.titulo; lbImg.src=o.img;
+    const tg=$('#lb-tag'); tg.className='tag mt-8 lg:mt-6 '+(/ÚNICA/i.test(o.tag)?'tag-unica':/LIMITADA/i.test(o.tag)?'tag-limitada':'tag-destaque'); tg.textContent=o.tag||o.categoria; tg.style.display='inline-block';
+    txt('#lb-title',o.titulo); txt('#lb-artist',a.nome);
+    set('#lb-spec',[['Categoria',o.categoria],['Técnica',o.tecnica],['Dimensões',o.dimensoes],['Ano',o.ano],['Valor',o.valor]].map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join(''));
+    txt('#lb-story',o.historia);
+    href('#lb-wa', wa(fill(C.mensagens.consulta,{obra:o.titulo,artista:a.nome})));
+    lb.classList.remove('hidden');
+    document.documentElement.classList.add('lb-open');
+    if(window.lenis && lenis.stop) lenis.stop();
+    requestAnimationFrame(()=>{ lb.classList.add('on'); $('#lb-close').focus({preventScroll:true}); });
+  }
+  function closeLB(){
+    lb.classList.remove('on');
+    closeT=setTimeout(()=>{ lb.classList.add('hidden'); document.documentElement.classList.remove('lb-open'); if(window.lenis && lenis.start) lenis.start(); setZoom(false); },430);
+    if(lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+  }
+  stage.addEventListener('click',e=>{ const on=!stage.classList.contains('zoomed'); if(on) origin(e.clientX,e.clientY); setZoom(on); });
+  stage.addEventListener('mousemove',e=>{ if(stage.classList.contains('zoomed')) origin(e.clientX,e.clientY); });
+  $('#lb-zoom').addEventListener('click',e=>{ e.stopPropagation(); setZoom(!stage.classList.contains('zoomed')); });
+  $('#lb-close').addEventListener('click',closeLB);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){ if(!lb.classList.contains('hidden')) closeLB(); else if(drawer.classList.contains('open')) setDrawer(false); }
+    if((e.key==='Enter'||e.key===' ') && e.target.matches && e.target.matches('[role="button"][data-open]')){ e.preventDefault(); openLB(e.target.dataset.open); }
+    if(e.key==='Tab' && !lb.classList.contains('hidden')){
+      const f=$$('button,a[href]',lb).filter(x=>x.offsetParent!==null); if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  });
+  document.addEventListener('click',e=>{ const t=e.target.closest('[data-open]'); if(t){ e.preventDefault(); openLB(t.dataset.open); } });
+
+  /* ---- SPOTLIGHT DA HERO (só transform: compositor, sem repaint) ---- */
+  const hero=$('#galeria'), spot=$('#spot');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  let HW=1,HH=1;
+  const measure=()=>{ const r=hero.getBoundingClientRect(); HW=r.width||1; HH=r.height||1; };
+  measure(); addEventListener('resize',measure,{passive:true});
+  if('ResizeObserver' in window) new ResizeObserver(measure).observe(hero);
+  let tx=.72, ty=.46, cx=tx, cy=ty, raf=null;
+  const apply=()=>{ spot.style.transform=`translate3d(${(cx*HW).toFixed(1)}px,${(cy*HH).toFixed(1)}px,0)`; };
+  const loop=()=>{
+    cx+=(tx-cx)*.08; cy+=(ty-cy)*.08; apply();
+    raf = (Math.abs(tx-cx)>.001||Math.abs(ty-cy)>.001) ? requestAnimationFrame(loop) : null;
+  };
+  const kick=()=>{ if(reduce){ cx=tx; cy=ty; apply(); } else if(!raf){ raf=requestAnimationFrame(loop); } };
+  const move=(x,y)=>{ const r=hero.getBoundingClientRect(); tx=(x-r.left)/r.width; ty=(y-r.top)/r.height; kick(); };
+  hero.addEventListener('pointermove',e=>move(e.clientX,e.clientY),{passive:true});
+  hero.addEventListener('touchmove',e=>{ const t=e.touches[0]; if(t) move(t.clientX,t.clientY); },{passive:true});
+  hero.addEventListener('pointerleave',()=>{ tx=.72; ty=.46; kick(); });
+  apply();
+})();
+</script>
+
+<!-- ============ MOTOR SIPFLOW CORE ============ -->
+<script src="https://sipflow-core.vercel.app/lenis.min.js"></script>
+<script src="https://sipflow-core.vercel.app/gsap.min.js"></script>
+<script src="https://sipflow-core.vercel.app/motor.js"></script>
+
+<!-- ============ MOVIMENTO: revelação teatral (clip-path) + parallax de parede ============ -->
+<script>
+(function(){
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const wraps = Array.from(document.querySelectorAll('.clip-wrap'));
+  const feats = Array.from(document.querySelectorAll('.feat[data-par]'));
+  const CLIP0 = 'inset(100% -80px -100px -80px)';
+  const CLIP1 = 'inset(0% -80px -100px -80px)';
+
+  /* Fallback em CSS puro (sem GSAP/ScrollTrigger) */
+  function fallback(){
+    if(reduce){ return; }
+    const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{threshold:.15});
+    wraps.forEach(w=>{ w.classList.add('fb'); io.observe(w); });
+    if(innerWidth>=1024){
+      let ticking=false;
+      const upd=()=>{
+        feats.forEach(f=>{
+          const r=f.getBoundingClientRect(), p=(r.top+r.height/2-innerHeight/2)/innerHeight; // -1..1
+          f.style.transform=`translate3d(0,${(-p*(+f.dataset.par)).toFixed(1)}px,0)`;
+        });
+        ticking=false;
+      };
+      addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(upd); } },{passive:true});
+      upd();
+    }
+  }
+
+  function loadST(){
+    return new Promise(res=>{
+      if(window.ScrollTrigger || !window.gsap) return res(!!window.ScrollTrigger);
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
+      s.onload=()=>res(!!window.ScrollTrigger); s.onerror=()=>res(false);
+      document.head.appendChild(s);
+    });
+  }
+
+  (async function init(){
+    if(reduce) return;
+    if(!window.gsap){ fallback(); return; }
+    const ok = await loadST();
+    if(!ok){ fallback(); return; }
+    try{
+      gsap.registerPlugin(ScrollTrigger);
+
+      /* Revelação teatral: abre de baixo para cima + escala 1.08 → 1.0 */
+      wraps.forEach(el=>{
+        const im = el.querySelector('.art img');
+        gsap.set(el,{clipPath:CLIP0});
+        gsap.set(im,{scale:1.08});
+        const tl = gsap.timeline({ scrollTrigger:{ trigger:el, start:'top 86%', once:true } });
+        tl.to(el,{ clipPath:CLIP1, duration:1.5, ease:'power3.inOut', onComplete:()=>gsap.set(el,{clearProps:'clipPath'}) })
+          .to(im,{ scale:1, duration:1.9, ease:'power2.out' },0);
+      });
+
+      /* Parallax de parede: assimetria vertical suave no scroll (desktop) */
+      const par = ()=>feats.forEach(f=>{
+        const s=+f.dataset.par;
+        gsap.fromTo(f,{y:s},{ y:-s, ease:'none', scrollTrigger:{ trigger:f, start:'top bottom', end:'bottom top', scrub:true } });
+      });
+      if(gsap.matchMedia){ gsap.matchMedia().add('(min-width:1024px)',par); }
+      else if(innerWidth>=1024){ par(); }
+
+      addEventListener('load',()=>ScrollTrigger.refresh());
+      setTimeout(()=>ScrollTrigger.refresh(),1200);
+    }catch(err){
+      console.warn('GSAP/ScrollTrigger indisponível, usando fallback.',err);
+      wraps.forEach(w=>gsap.set&&gsap.set(w,{clearProps:'clipPath'}));
+      fallback();
+    }
+  })();
+})();
+</script>
+</body>
+</html>
