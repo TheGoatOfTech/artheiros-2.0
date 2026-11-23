@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Galeria Curatorial Amanda Costa — Arte autoral e independente</title>
-<meta name="description" content="Galeria curatorial de arte autoral e independente, com seleção de Amanda Costa.">
+<title>ARTHEIROS — Galeria de Arte Autoral</title>
+<meta name="description" content="ARTHEIROS — Galeria de arte autoral e independente, com curadoria de Amanda Costa.">
 <meta name="theme-color" content="#14241E">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314241E'/%3E%3Ctext x='32' y='42' font-size='30' text-anchor='middle' fill='%23B8924A' font-family='serif' font-style='italic'%3EAC%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314241E'/%3E%3Ctext x='32' y='43' font-size='32' text-anchor='middle' fill='%23B8924A' font-family='serif'%3EA%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@
   .escuro-70{color:color-mix(in srgb,var(--tescuro) 72%,transparent)}
 
   /* textura de tela */
-  .grain{ /* papel de algodão estático: sem filtro SVG, sem custo por frame */
+  .grain{
     position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.025;
     background-image:radial-gradient(rgba(0,0,0,.9) .6px,transparent .75px),radial-gradient(rgba(0,0,0,.9) .5px,transparent .65px);
     background-size:3px 3px,7px 7px; background-position:0 0,1px 2px;
@@ -53,7 +53,7 @@
       inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(0,0,0,.45),
       0 2px 3px rgba(0,0,0,.28), 0 14px 22px -8px rgba(0,0,0,.38), 0 36px 56px -24px rgba(0,0,0,.5);
   }
-  .frame::after{ /* filete interno da moldura */
+  .frame::after{
     content:""; position:absolute; inset:clamp(9px,1.3vw,15px); pointer-events:none;
     box-shadow:0 0 0 1px rgba(0,0,0,.35);
   }
@@ -67,7 +67,7 @@
     box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.4), inset 0 0 14px rgba(0,0,0,.35);
   }
   .art img{ width:100%; height:100%; object-fit:cover; display:block; transform-origin:center; }
-  .art::after{ /* reflexo de vidro */
+  .art::after{
     content:""; position:absolute; inset:0; pointer-events:none;
     background:linear-gradient(115deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 38%,rgba(255,255,255,0) 100%);
   }
@@ -82,7 +82,6 @@
   }
 
   /* spotlight */
-  /* spotlight: uma camada pré-pintada que só se move com transform (compositor, sem repaint) */
   #spot{ position:absolute; left:0; top:0; width:1100px; height:1100px; margin:-550px 0 0 -550px; pointer-events:none; will-change:transform;
          background:radial-gradient(circle, rgba(255,206,130,.30) 0%, rgba(255,206,130,.10) 38%, transparent 68%); }
   .hero-vignette{ background:radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,.45) 100%); }
@@ -118,7 +117,7 @@
   .nav-cta:hover{ background:var(--terra); color:var(--tclaro); border-color:var(--terra); }
   @media (min-width:1024px){ .feat{ will-change:transform; } }
 
-  /* divisórias arquitetônicas: junção reta + filete de latão + plaqueta de sala */
+  /* divisórias arquitetônicas */
   .rd{ position:relative; height:68px; background:linear-gradient(to bottom,var(--rt) 50%,var(--rb) 50%); }
   .rd::before{ content:""; position:absolute; left:0; right:0; top:50%; height:1px; background:color-mix(in srgb,var(--ouro) 40%,transparent); }
   .rd-plaque{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); padding:.5rem 1.5rem; background:var(--carvao); color:var(--ouro); border:1px solid color-mix(in srgb,var(--ouro) 40%,transparent); font-size:.6rem; letter-spacing:.24em; white-space:nowrap; box-shadow:0 6px 14px rgba(0,0,0,.25); }
@@ -126,13 +125,35 @@
   .rd-plaque::before{ left:8px; } .rd-plaque::after{ right:8px; }
   @media (max-width:480px){ .rd-plaque{ padding:.45rem 1.1rem; letter-spacing:.18em; font-size:.55rem; } }
 
-  /* gaveta */
-  #drawer{ transform:translateX(100%); transition:transform .6s cubic-bezier(.77,0,.18,1); }
-  #drawer.open{ transform:none; }
-  #drawer-bg{ opacity:0; pointer-events:none; transition:opacity .5s; }
-  #drawer-bg.open{ opacity:1; pointer-events:auto; }
+  /* gavetas laterais (Menu + Checkout) */
+  #drawer, #checkout-drawer{ transform:translateX(100%); transition:transform .6s cubic-bezier(.77,0,.18,1); }
+  #drawer.open, #checkout-drawer.open{ transform:none; }
+  #drawer-bg, #checkout-bg{ opacity:0; pointer-events:none; transition:opacity .5s; }
+  #drawer-bg.open, #checkout-bg.open{ opacity:1; pointer-events:auto; }
   .drawer-link{ display:flex; align-items:baseline; gap:1.2rem; padding:.9rem 0; border-bottom:1px solid rgba(245,242,235,.12); transition:padding .35s, color .3s; }
   .drawer-link:hover{ padding-left:.8rem; color:var(--ouro); }
+
+  /* estilos internos do checkout visual */
+  .chk-input{
+    width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(245,242,235,.2);
+    color:var(--tclaro); padding:.75rem .95rem; border-radius:4px; font-size:.88rem;
+    transition:border-color .25s, background .25s;
+  }
+  .chk-input:focus{ outline:none; border-color:var(--ouro); background:rgba(255,255,255,.07); }
+  .chk-input::placeholder{ color:rgba(245,242,235,.38); }
+  .chk-option{
+    display:flex; align-items:flex-start; gap:.85rem; padding:.9rem 1rem; border-radius:4px;
+    border:1px solid rgba(245,242,235,.16); background:rgba(255,255,255,.02); cursor:pointer;
+    transition:border-color .25s, background .25s;
+  }
+  .chk-option:hover{ border-color:rgba(184,146,74,.55); }
+  .chk-option.selected{ border-color:var(--ouro); background:rgba(184,146,74,.11); }
+  .pay-tab{
+    flex:1; padding:.6rem .5rem; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
+    border:1px solid rgba(245,242,235,.18); border-radius:4px; text-align:center; cursor:pointer;
+    transition:all .25s; color:rgba(245,242,235,.72);
+  }
+  .pay-tab.active{ background:var(--ouro); color:#14241E; border-color:var(--ouro); font-weight:700; }
 
   /* tags */
   .tag{ display:inline-block; padding:.28rem .6rem; font-size:.62rem; letter-spacing:.16em; border-radius:2px; font-family:'Space Mono',monospace; }
@@ -189,18 +210,25 @@
 <div class="grain" aria-hidden="true"></div>
 
 <!-- ============ MENU FLUTUANTE (PILL NAV) ============ -->
-<header class="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-40 w-[min(94vw,1040px)]">
+<header class="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-40 w-[min(94vw,1080px)]">
   <nav class="nav-pill rounded-full flex items-center justify-between gap-3 px-5 py-2" aria-label="Navegação principal">
-    <a href="#top" id="nav-brand" class="serif text-xl font-medium italic leading-none whitespace-nowrap"></a>
-    <div id="nav-links" class="hidden lg:flex items-center gap-8"></div>
+    <a href="#top" id="nav-brand" class="flex flex-col leading-none whitespace-nowrap">
+      <span class="serif text-xl sm:text-2xl font-semibold tracking-[.12em]">ARTHEIROS</span>
+      <span class="mono text-[.48rem] tracking-[.22em] opacity-70 mt-0.5">GALERIA DE ARTE AUTORAL</span>
+    </a>
+    <div id="nav-links" class="hidden lg:flex items-center gap-7"></div>
     <div class="flex items-center gap-2">
-      <a id="nav-cta" class="nav-cta"></a>
+      <a id="nav-cta" class="nav-cta hidden sm:inline-flex"></a>
+      <button id="bag-btn" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border text-[.66rem] mono tracking-[.12em] transition-colors hover:border-[color:var(--terra)] hover:text-[color:var(--terra)]" style="border-color:color-mix(in srgb,var(--tescuro) 25%,transparent)" aria-label="Abrir sacola de aquisição">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span id="bag-count">0</span>
+      </button>
       <button id="menu-btn" class="mono text-[.62rem] tracking-[.2em] px-3.5 py-2 rounded-full border" style="border-color:color-mix(in srgb,var(--tescuro) 25%,transparent)" aria-expanded="false" aria-controls="drawer">MENU</button>
     </div>
   </nav>
 </header>
 
-<!-- gaveta lateral -->
+<!-- gaveta lateral (Menu) -->
 <div id="drawer-bg" class="fixed inset-0 z-[900] bg-black/60"></div>
 <aside id="drawer" class="fixed top-0 right-0 bottom-0 z-[910] w-[min(92vw,440px)] bg-carvao t-claro p-8 sm:p-10 flex flex-col" aria-hidden="true" aria-label="Menu">
   <div class="flex items-center justify-between mb-10">
@@ -211,6 +239,33 @@
   <div class="mt-auto pt-10">
     <a id="drawer-wa" target="_blank" rel="noopener" class="btn btn-ouro w-full justify-center">Falar com a curadoria no WhatsApp</a>
     <p id="drawer-sub" class="mono text-[.68rem] mt-5 claro-70"></p>
+  </div>
+</aside>
+
+<!-- ============ DRAWER LATERAL DE AQUISIÇÃO (CHECKOUT VISUAL 3 ETAPAS) ============ -->
+<div id="checkout-bg" class="fixed inset-0 z-[920] bg-black/70"></div>
+<aside id="checkout-drawer" class="fixed top-0 right-0 bottom-0 z-[930] w-[min(96vw,500px)] bg-carvao t-claro flex flex-col border-l border-white/10" aria-hidden="true" aria-label="Aquisição de Obra">
+  <!-- Topo fixo do checkout -->
+  <div class="p-6 sm:p-7 border-b border-white/10 shrink-0">
+    <div class="flex items-center justify-between">
+      <div>
+        <span class="mono text-[.62rem] tracking-[.24em] t-ouro block">ARTHEIROS · EXPERIÊNCIA DE AQUISIÇÃO</span>
+        <h2 class="serif text-2xl sm:text-3xl font-semibold mt-0.5">Acervo Selecionado</h2>
+      </div>
+      <button id="checkout-close" class="mono text-[.68rem] tracking-[.18em] px-3 py-2 rounded-full border border-white/25 hover:border-white/50">FECHAR ✕</button>
+    </div>
+
+    <!-- Navegador das 3 Etapas -->
+    <div id="chk-steps-bar" class="mt-5 grid grid-cols-3 gap-2 mono text-[.62rem] tracking-[.14em]">
+      <button type="button" data-goto-step="1" class="chk-step-pill py-2 px-2 rounded border text-center transition-colors">01. OBRA</button>
+      <button type="button" data-goto-step="2" class="chk-step-pill py-2 px-2 rounded border text-center transition-colors">02. FRETE</button>
+      <button type="button" data-goto-step="3" class="chk-step-pill py-2 px-2 rounded border text-center transition-colors">03. PAGAMENTO</button>
+    </div>
+  </div>
+
+  <!-- Corpo rolável do checkout -->
+  <div id="checkout-body" class="flex-1 overflow-y-auto p-6 sm:p-7" data-lenis-prevent>
+    <!-- Preenchido dinamicamente pelo script -->
   </div>
 </aside>
 
@@ -254,7 +309,6 @@
       </div>
     </div>
   </div>
-
 </section>
 
 <div class="rd" role="separator" data-sala="curadoria" style="--rt:var(--verde);--rb:var(--papel)"><span class="rd-plaque mono"></span></div>
@@ -336,8 +390,8 @@
   <div class="max-w-7xl mx-auto px-6">
     <div class="grid lg:grid-cols-[1.2fr_2fr] gap-14">
       <div data-reveal>
-        <p id="ft-brand" class="serif italic font-semibold text-4xl leading-none"></p>
-        <p id="ft-sub" class="mono text-[.68rem] tracking-[.22em] t-ouro mt-3"></p>
+        <p id="ft-brand" class="serif font-semibold text-4xl tracking-[.12em] leading-none">ARTHEIROS</p>
+        <p id="ft-sub" class="mono text-[.68rem] tracking-[.22em] t-ouro mt-3">GALERIA DE ARTE AUTORAL · CURADORIA AMANDA COSTA</p>
         <p id="ft-sign" class="serif italic text-2xl mt-8 claro-70 max-w-xs leading-snug"></p>
       </div>
       <div id="ft-blocks" class="grid sm:grid-cols-3 gap-8"></div>
@@ -365,7 +419,7 @@
         </button>
       </div>
     </div>
-    <div class="relative overflow-y-auto p-7 sm:p-10 lg:p-12 border-t lg:border-t-0 lg:border-l border-white/10">
+    <div class="relative overflow-y-auto p-7 sm:p-10 lg:p-12 border-t lg:border-t-0 lg:border-l border-white/10" data-lenis-prevent>
       <button id="lb-close" class="mono text-[.7rem] tracking-[.2em] px-3.5 py-2 rounded-full border border-white/25 absolute right-5 top-5">FECHAR ✕</button>
       <span id="lb-tag" class="tag mt-8 lg:mt-6"></span>
       <h3 id="lb-title" class="serif font-bold text-4xl sm:text-5xl leading-[1.02] mt-4"></h3>
@@ -374,8 +428,9 @@
       <dl id="lb-spec" class="spec mono"></dl>
       <p class="mono text-[.64rem] tracking-[.22em] t-ouro mt-9 mb-3">HISTÓRIA DA PEÇA</p>
       <p id="lb-story" class="claro-70 font-light leading-relaxed"></p>
-      <a id="lb-wa" target="_blank" rel="noopener" class="btn btn-ouro mt-9 w-full justify-center">Consultar Obra com a Curadora</a>
-      <p class="mono text-[.62rem] claro-70 mt-4 text-center">Acompanha certificado de autenticidade assinado.</p>
+      <button id="lb-buy" type="button" class="btn btn-ouro mt-9 w-full justify-center">Adquirir esta Obra</button>
+      <a id="lb-wa" target="_blank" rel="noopener" class="mono text-[.66rem] tracking-[.14em] uppercase claro-70 hover:text-[color:var(--ouro)] mt-4 block text-center underline underline-offset-4">Ou tirar dúvidas com a curadora</a>
+      <p class="mono text-[.62rem] claro-70 mt-3 text-center">Acompanha certificado de autenticidade assinado.</p>
     </div>
   </div>
 </div>
@@ -399,16 +454,22 @@
   const txt = (sel,t)=>{ const el=$(sel); if(el) el.textContent=t; return el; };
   const href= (sel,h)=>{ const el=$(sel); if(el) el.setAttribute('href',h); return el; };
 
+  /* helpers de moeda para o checkout visual */
+  const parseBRL = str => {
+    const clean = String(str||'0').replace(/[^\d,]/g,'').replace(',','.');
+    return parseFloat(clean) || 0;
+  };
+  const fmtBRL = num => Number(num||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+
   /* ---- cores da config → variáveis CSS ---- */
   const k = C.cores, root = document.documentElement.style;
   root.setProperty('--verde',k.verde);  root.setProperty('--papel',k.papel);   root.setProperty('--carvao',k.carvao);
   root.setProperty('--ouro',k.ouro);    root.setProperty('--terra',k.terracota);
   root.setProperty('--tclaro',k.textoClaro); root.setProperty('--tescuro',k.textoEscuro);
-  document.title = C.marca.nome + ' — Arte autoral e independente';
+  document.title = 'ARTHEIROS — Galeria de Arte Autoral';
   const meta = document.querySelector('meta[name="description"]'); if(meta) meta.content = C.marca.descricaoMeta;
 
-  /* ---- imagens com fallback em dois estágios (local → Unsplash → placeholder SVG) ---- */
-  /* ---- ilustrações autorais de fallback (geradas, estáticas, sem filtro de ruído) ---- */
+  /* ---- ilustrações autorais de fallback ---- */
   const PAL={
     "Artes Visuais":["#B8924A","#8C3B2B","#1d3a4a","#e8d9b5","#c46a3a"],
     "Cerâmica":["#d9cdb4","#8a5a3b","#2b2b28","#b8924a","#efe7d6"],
@@ -445,7 +506,6 @@
     s+='</svg>';
     return artCache[key]='data:image/svg+xml;utf8,'+encodeURIComponent(s);
   }
-  /* local (./img) → Unsplash → ilustração autoral */
   window.imgErr = function(el){
     const st = +(el.dataset.st||0);
     if(st===0 && el.dataset.fb){ el.dataset.st=1; el.src=el.dataset.fb; }
@@ -462,7 +522,6 @@
   };
 
   /* ---- NAV ---- */
-  txt('#nav-brand', C.marca.curta);
   set('#nav-links', C.nav.links.map(l=>`<a class="nav-link uppercase tracking-wider text-xs font-light" href="${esc(l.href)}">${esc(l.texto)}</a>`).join(''));
   const navCta = $('#nav-cta'); navCta.textContent = C.nav.cta.texto; navCta.href = C.nav.cta.href;
   set('#drawer-nav', C.nav.gaveta.map(l=>`<a class="drawer-link" href="${esc(l.href)}" data-close-drawer><span class="mono text-xs t-ouro tracking-[.2em]">${esc(l.n)}</span><span>${esc(l.texto)}</span></a>`).join(''));
@@ -503,8 +562,8 @@
         </dl>
         <p class="mono text-lg font-bold mt-4">${esc(o.valor)}</p>
         <div class="mt-4 flex flex-wrap gap-2.5">
-          <button class="btn btn-line-escuro !py-2.5 !px-4 !text-[.78rem]" data-open="${esc(o.id)}">Inspecionar</button>
-          <a class="btn btn-terra !py-2.5 !px-4 !text-[.78rem]" target="_blank" rel="noopener" href="${wa(fill(C.mensagens.consulta,{obra:o.titulo,artista:a.nome}))}">Consultar</a>
+          <button type="button" class="btn btn-line-escuro !py-2.5 !px-4 !text-[.78rem]" data-open="${esc(o.id)}">Inspecionar</button>
+          <button type="button" class="btn btn-terra !py-2.5 !px-4 !text-[.78rem]" data-buy="${esc(o.id)}">Adquirir Obra</button>
         </div>
       </div>
     </article>`;
@@ -525,6 +584,10 @@
         <h4 class="serif font-bold text-xl leading-tight mt-2">${esc(o.titulo)}</h4>
         <p class="mono text-[.66rem] escuro-70 mt-1.5">${esc(o.tecnica)}<br>${esc(o.dimensoes)} · ${esc(o.ano)}</p>
         <p class="mono font-bold mt-2">${esc(o.valor)}</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button type="button" class="btn btn-line-escuro !py-2 !px-3.5 !text-[.74rem]" data-open="${esc(o.id)}">Inspecionar</button>
+          <button type="button" class="btn btn-terra !py-2 !px-3.5 !text-[.74rem]" data-buy="${esc(o.id)}">Adquirir</button>
+        </div>
       </div>
     </div>`;
   }
@@ -604,7 +667,6 @@
 
   /* ---- RODAPÉ ---- */
   const R = C.rodape;
-  txt('#ft-brand', C.marca.nome); txt('#ft-sub', C.marca.subtitulo.toUpperCase()+' · '+C.contato.cidade.toUpperCase());
   txt('#ft-sign', R.assinatura);
   set('#ft-blocks', R.blocos.map((b,i)=>`<div data-reveal style="--d:${i*.08}s"><h4 class="mono text-[.68rem] tracking-[.18em] t-ouro uppercase">${esc(b.titulo)}</h4><p class="text-sm claro-70 font-light leading-relaxed mt-3">${esc(b.texto)}</p></div>`).join(''));
   set('#ft-contacts', `
@@ -612,7 +674,7 @@
     <a class="hover:text-[color:var(--ouro)] transition-colors" href="mailto:${esc(C.contato.email)}">${esc(C.contato.email)}</a>
     <a class="hover:text-[color:var(--ouro)] transition-colors" target="_blank" rel="noopener" href="${esc(C.contato.instagramUrl)}">Instagram · ${esc(C.contato.instagram)}</a>`);
   txt('#ft-legal', R.legal);
-  txt('#ft-copy', `© ${C.marca.ano} ${C.marca.nome.toUpperCase()}`);
+  txt('#ft-copy', `© ${C.marca.ano} ARTHEIROS — GALERIA DE ARTE AUTORAL`);
 
   /* ---- REVELAÇÃO data-reveal (IntersectionObserver) ---- */
   document.documentElement.classList.add('rv');
@@ -627,7 +689,7 @@
   window.__observeReveal();
   setTimeout(()=>$$('[data-reveal]:not(.in)').forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top<innerHeight) el.classList.add('in'); }),600);
 
-  /* ---- GAVETA LATERAL ---- */
+  /* ---- GAVETA LATERAL (MENU) ---- */
   const drawer=$('#drawer'), dbg=$('#drawer-bg'), mb=$('#menu-btn');
   const setDrawer = open=>{
     drawer.classList.toggle('open',open); dbg.classList.toggle('open',open);
@@ -638,6 +700,382 @@
   $('#drawer-close').addEventListener('click',()=>setDrawer(false));
   dbg.addEventListener('click',()=>setDrawer(false));
   drawer.addEventListener('click',e=>{ if(e.target.closest('[data-close-drawer]')) setDrawer(false); });
+
+  /* ---- CHECKOUT VISUAL (3 ETAPAS: OBRA → FRETE → PAGAMENTO) ---- */
+  const chkDrawer = $('#checkout-drawer'), chkBg = $('#checkout-bg'), chkBody = $('#checkout-body');
+  const FRETES = [
+    { id:'melhor-envio', nome:'Melhor Envio (Logística Integrada)', prazo:'6 a 9 dias úteis', valor:68, desc:'Envio rastreado com seguro básico incluso.' },
+    { id:'correios',     nome:'Correios (SEDEX com Seguro)',        prazo:'3 a 5 dias úteis', valor:94, desc:'Entrega expressa prioritária com rastreamento ponto a ponto.' },
+    { id:'transportadora',nome:'Transportadora Especializada em Arte',prazo:'5 a 8 dias úteis', valor:145, desc:'Caixa sob medida, proteção térmica e manuseio dedicado.' }
+  ];
+
+  const chkState = {
+    obraId: null,
+    step: 1, // 1: Obra | 2: Frete | 3: Pagamento | 4: Confirmação
+    cep: '',
+    freteCalculado: false,
+    freteId: 'melhor-envio',
+    politicaAberta: false,
+    payMethod: 'cartao', // cartao | pix | boleto
+    parcelas: 1,
+    pixCopiado: false,
+    boletoGerado: false
+  };
+
+  function updateStepPills(){
+    const bar = $('#chk-steps-bar');
+    bar.style.display = chkState.step === 4 ? 'none' : 'grid';
+    $$('.chk-step-pill').forEach(btn=>{
+      const s = Number(btn.dataset.gotoStep);
+      const active = s === chkState.step;
+      const done = s < chkState.step;
+      btn.style.borderColor = active ? 'var(--ouro)' : (done ? 'rgba(184,146,74,.45)' : 'rgba(245,242,235,.15)');
+      btn.style.background  = active ? 'var(--ouro)' : 'transparent';
+      btn.style.color       = active ? '#14241E' : (done ? 'var(--ouro)' : 'rgba(245,242,235,.55)');
+      btn.style.fontWeight  = active ? '700' : '400';
+    });
+  }
+
+  function renderCheckout(){
+    updateStepPills();
+    const o = chkState.obraId ? obra(chkState.obraId) : null;
+    if(!o){
+      chkBody.innerHTML = `
+        <div class="py-16 text-center">
+          <p class="mono text-[.66rem] tracking-[.22em] t-ouro">SACOLA VAZIA</p>
+          <h3 class="serif text-3xl mt-3">Nenhuma obra selecionada ainda</h3>
+          <p class="text-sm claro-70 font-light mt-3 max-w-xs mx-auto leading-relaxed">Explore o acervo da galeria e clique em <strong>Adquirir Obra</strong> para visualizar a experiência completa de compra.</p>
+          <a href="#acervo" id="chk-empty-explore" class="btn btn-ouro mt-8">Explorar Acervo</a>
+        </div>`;
+      return;
+    }
+
+    const a = artista(o.artistaId);
+    const precoObra = parseBRL(o.valor);
+    const freteSel = FRETES.find(f=>f.id===chkState.freteId) || FRETES[0];
+    const valorFrete = chkState.freteCalculado ? freteSel.valor : 0;
+    const totalGeral = precoObra + valorFrete;
+
+    /* ETAPA 1: RESUMO DA OBRA */
+    if(chkState.step === 1){
+      chkBody.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex gap-4 items-start p-4 rounded border border-white/10 bg-white/[0.02]">
+            <div class="w-24 shrink-0">${frame(o)}</div>
+            <div class="min-w-0 flex-1">
+              ${tagHTML(o.tag)}
+              <h3 class="serif font-bold text-2xl leading-tight mt-2">${esc(o.titulo)}</h3>
+              <p class="serif italic text-lg t-ouro">${esc(a.nome)}</p>
+              <p class="mono text-[.64rem] claro-70 mt-2">${esc(o.tecnica)}<br>${esc(o.dimensoes)} · ${esc(o.ano)}</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded border border-[color:var(--ouro)]/35 bg-[color:var(--ouro)]/10">
+            <p class="mono text-[.64rem] tracking-[.18em] t-ouro">CURADORIA & AUTENTICIDADE</p>
+            <p class="text-xs claro-70 leading-relaxed mt-1.5">Acompanha Certificado de Autenticidade físico assinado por <strong>Amanda Costa</strong> e por <strong>${esc(a.nome)}</strong>, além de embalagem museológica reforçada.</p>
+          </div>
+
+          <div class="border-t border-white/10 pt-4 flex items-baseline justify-between">
+            <span class="mono text-xs claro-70 tracking-[.14em]">VALOR DA OBRA</span>
+            <span class="mono text-2xl font-bold t-ouro">${esc(o.valor)}</span>
+          </div>
+
+          <button type="button" id="chk-to-2" class="btn btn-ouro w-full justify-center">Calcular Entrega →</button>
+        </div>`;
+    }
+
+    /* ETAPA 2: FRETE & ENVIO */
+    else if(chkState.step === 2){
+      chkBody.innerHTML = `
+        <div class="space-y-5">
+          <div class="p-3.5 rounded border border-white/10 bg-white/[0.03]">
+            <p class="mono text-[.6rem] tracking-[.18em] t-ouro">ORIGEM DO ENVIO</p>
+            <p class="text-sm mt-1">Ateliê de <strong>${esc(a.nome)}</strong> — <span class="t-ouro">${esc(a.cidade)}</span></p>
+            <p class="text-[.75rem] claro-70 mt-0.5">O artista realiza a embalagem especializada e despacha diretamente para você.</p>
+          </div>
+
+          <div>
+            <label for="chk-cep" class="mono text-[.64rem] tracking-[.18em] claro-70 block mb-2">CEP DE DESTINO</label>
+            <div class="flex gap-2">
+              <input id="chk-cep" type="text" inputmode="numeric" maxlength="9" placeholder="00000-000" value="${esc(chkState.cep)}" class="chk-input mono">
+              <button type="button" id="chk-calc-cep" class="btn btn-line-claro !py-2.5 !px-5 !text-xs shrink-0">Calcular</button>
+            </div>
+          </div>
+
+          ${chkState.freteCalculado ? `
+            <div class="space-y-2.5 pt-1">
+              <p class="mono text-[.62rem] tracking-[.18em] t-ouro">MODALIDADES DISPONÍVEIS (SIMULAÇÃO)</p>
+              ${FRETES.map(f=>`
+                <label class="chk-option ${chkState.freteId===f.id?'selected':''}" data-select-frete="${esc(f.id)}">
+                  <input type="radio" name="frete_opt" value="${esc(f.id)}" ${chkState.freteId===f.id?'checked':''} class="mt-1 accent-[#B8924A]">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-baseline justify-between gap-2">
+                      <span class="text-sm font-medium">${esc(f.nome)}</span>
+                      <span class="mono text-sm font-bold t-ouro shrink-0">${fmtBRL(f.valor)}</span>
+                    </div>
+                    <p class="mono text-[.64rem] claro-70 mt-0.5">${esc(f.prazo)}</p>
+                    <p class="text-xs claro-70 mt-1 leading-relaxed">${esc(f.desc)}</p>
+                  </div>
+                </label>
+              `).join('')}
+            </div>
+          ` : `
+            <div class="p-5 rounded border border-dashed border-white/15 text-center">
+              <p class="text-xs claro-70">Digite qualquer CEP acima e clique em <strong>Calcular</strong> para visualizar as opções de Melhor Envio, Correios e Transportadora.</p>
+            </div>
+          `}
+
+          <!-- Política de Entregas, Devoluções e Atendimento -->
+          <div class="border-t border-white/10 pt-3">
+            <button type="button" id="chk-toggle-pol" class="mono text-[.62rem] tracking-[.14em] t-ouro hover:underline flex items-center justify-between w-full text-left">
+              <span>POLÍTICA DE ENTREGAS, DEVOLUÇÕES E ATENDIMENTO</span>
+              <span>${chkState.politicaAberta ? '−' : '+'}</span>
+            </button>
+            ${chkState.politicaAberta ? `
+              <div class="mt-2.5 p-3.5 rounded bg-white/[0.03] text-xs claro-70 space-y-2 leading-relaxed">
+                <p><strong>Seguro Integral:</strong> Todas as obras viajam seguradas contra avarias ou extravio.</p>
+                <p><strong>Prazo de Arrependimento:</strong> Você tem até 7 dias corridos após o recebimento para solicitar devolução na embalagem original.</p>
+                <p><strong>Acompanhamento Curatorial:</strong> A Artheiros monitora o código de rastreamento junto ao artista até a entrega final.</p>
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="border-t border-white/10 pt-4 space-y-1.5 mono text-xs">
+            <div class="flex justify-between claro-70"><span>Obra</span><span>${fmtBRL(precoObra)}</span></div>
+            <div class="flex justify-between claro-70"><span>Frete selecionado</span><span>${chkState.freteCalculado ? fmtBRL(valorFrete) : 'A calcular'}</span></div>
+            <div class="flex justify-between text-base font-bold pt-2 border-t border-white/10"><span>TOTAL</span><span class="t-ouro">${fmtBRL(totalGeral)}</span></div>
+          </div>
+
+          <div class="flex gap-2.5 pt-1">
+            <button type="button" data-goto-step="1" class="btn btn-line-claro !py-3 !px-4 !text-xs">← Voltar</button>
+            <button type="button" id="chk-to-3" class="btn btn-ouro flex-1 justify-center">Ir para Pagamento →</button>
+          </div>
+        </div>`;
+    }
+
+    /* ETAPA 3: PAGAMENTO (MERCADO PAGO) */
+    else if(chkState.step === 3){
+      const parcelasOpts = Array.from({length:12},(_,idx)=>{
+        const n = idx+1;
+        const valParcela = totalGeral / n;
+        return `<option value="${n}" ${chkState.parcelas===n?'selected':''}>${n}x de ${fmtBRL(valParcela)} ${n<=6?'sem juros':'(Mercado Pago)'}</option>`;
+      }).join('');
+
+      chkBody.innerHTML = `
+        <div class="space-y-5">
+          <div class="flex items-center justify-between p-3 rounded border border-white/10 bg-white/[0.03]">
+            <div>
+              <p class="mono text-[.6rem] tracking-[.18em] t-ouro">CHECKOUT INTEGRADO</p>
+              <p class="text-xs claro-70 mt-0.5">Ambiente seguro via <strong>Mercado Pago</strong> · Split automático ao artista</p>
+            </div>
+            <span class="mono text-[.62rem] px-2 py-1 rounded bg-[#009EE3]/20 text-[#5ec8f8] border border-[#009EE3]/40">MP SEGURO</span>
+          </div>
+
+          <!-- Abas de Forma de Pagamento -->
+          <div class="flex gap-2 mono">
+            <button type="button" data-pay-tab="cartao" class="pay-tab ${chkState.payMethod==='cartao'?'active':''}">Cartão</button>
+            <button type="button" data-pay-tab="pix" class="pay-tab ${chkState.payMethod==='pix'?'active':''}">Pix</button>
+            <button type="button" data-pay-tab="boleto" class="pay-tab ${chkState.payMethod==='boleto'?'active':''}">Boleto</button>
+          </div>
+
+          ${chkState.payMethod === 'cartao' ? `
+            <div class="space-y-3">
+              <div>
+                <label class="mono text-[.6rem] tracking-[.16em] claro-70 block mb-1">NÚMERO DO CARTÃO</label>
+                <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" class="chk-input mono">
+              </div>
+              <div>
+                <label class="mono text-[.6rem] tracking-[.16em] claro-70 block mb-1">NOME IMPRESSO NO CARTÃO</label>
+                <input type="text" placeholder="COMO CONSTA NO CARTÃO" class="chk-input uppercase">
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="mono text-[.6rem] tracking-[.16em] claro-70 block mb-1">VALIDADE</label>
+                  <input type="text" placeholder="MM/AA" maxlength="5" class="chk-input mono">
+                </div>
+                <div>
+                  <label class="mono text-[.6rem] tracking-[.16em] claro-70 block mb-1">CVV</label>
+                  <input type="text" placeholder="123" maxlength="4" class="chk-input mono">
+                </div>
+              </div>
+              <div>
+                <label class="mono text-[.6rem] tracking-[.16em] claro-70 block mb-1">PARCELAMENTO</label>
+                <select id="chk-parcelas" class="chk-input bg-[#1a1c1a]">${parcelasOpts}</select>
+              </div>
+            </div>
+          ` : ''}
+
+          ${chkState.payMethod === 'pix' ? `
+            <div class="p-5 rounded border border-white/15 bg-white/[0.02] text-center space-y-4">
+              <div class="w-36 h-36 mx-auto bg-white p-2.5 rounded">
+                <svg viewBox="0 0 100 100" class="w-full h-full fill-[#121312]">
+                  <rect x="6" y="6" width="26" height="26"/><rect x="11" y="11" width="16" height="16" fill="#fff"/><rect x="15" y="15" width="8" height="8"/>
+                  <rect x="68" y="6" width="26" height="26"/><rect x="73" y="11" width="16" height="16" fill="#fff"/><rect x="77" y="15" width="8" height="8"/>
+                  <rect x="6" y="68" width="26" height="26"/><rect x="11" y="73" width="16" height="16" fill="#fff"/><rect x="15" y="77" width="8" height="8"/>
+                  <rect x="40" y="10" width="8" height="8"/><rect x="52" y="18" width="8" height="14"/><rect x="40" y="40" width="20" height="20"/>
+                  <rect x="12" y="44" width="14" height="8"/><rect x="68" y="44" width="10" height="16"/><rect x="84" y="52" width="10" height="12"/>
+                  <rect x="44" y="68" width="12" height="10"/><rect x="64" y="72" width="14" height="20"/><rect x="84" y="80" width="10" height="14"/>
+                </svg>
+              </div>
+              <p class="text-xs claro-70 leading-relaxed">Aprovação imediata via Mercado Pago. Escaneie o QR Code ou copie o código abaixo:</p>
+              <button type="button" id="chk-copy-pix" class="btn btn-line-claro !py-2.5 !px-5 !text-xs w-full justify-center">
+                ${chkState.pixCopiado ? 'Código Pix copiado ✓' : 'Copiar código Pix Copia e Cola'}
+              </button>
+            </div>
+          ` : ''}
+
+          ${chkState.payMethod === 'boleto' ? `
+            <div class="p-5 rounded border border-white/15 bg-white/[0.02] space-y-4">
+              <p class="text-xs claro-70 leading-relaxed">O boleto bancário registrado tem vencimento em <strong>2 dias úteis</strong>. A obra fica reservada durante o prazo de compensação.</p>
+              <div class="p-3 bg-white rounded text-[#121312] font-mono text-[.65rem] text-center tracking-wider">
+                23793.38128 60082.677139 95000.063305 1 99420000${String(Math.round(totalGeral*100)).padStart(6,'0')}
+              </div>
+              <button type="button" id="chk-gen-boleto" class="btn btn-line-claro !py-2.5 !px-4 !text-xs w-full justify-center">
+                ${chkState.boletoGerado ? 'Linha digitável copiada ✓' : 'Copiar linha digitável do Boleto'}
+              </button>
+            </div>
+          ` : ''}
+
+          <div class="border-t border-white/10 pt-4 flex items-baseline justify-between">
+            <div>
+              <span class="mono text-[.64rem] claro-70 block">TOTAL A PAGAR</span>
+              <span class="text-xs claro-70">${chkState.freteCalculado ? esc(freteSel.nome) : 'Frete a combinar'}</span>
+            </div>
+            <span class="mono text-2xl font-bold t-ouro">${fmtBRL(totalGeral)}</span>
+          </div>
+
+          <div class="flex gap-2.5 pt-1">
+            <button type="button" data-goto-step="2" class="btn btn-line-claro !py-3 !px-4 !text-xs">← Frete</button>
+            <button type="button" id="chk-confirm" class="btn btn-ouro flex-1 justify-center">Finalizar Aquisição</button>
+          </div>
+          <p class="mono text-[.58rem] claro-70 text-center opacity-70">SIMULAÇÃO VISUAL DE INTERFACE — NENHUMA COBRANÇA REAL SERÁ EFETUADA.</p>
+        </div>`;
+    }
+
+    /* ETAPA 4: CONFIRMAÇÃO DE EXPERIÊNCIA */
+    else if(chkState.step === 4){
+      chkBody.innerHTML = `
+        <div class="space-y-6 py-2">
+          <div class="p-5 rounded border border-[color:var(--ouro)] bg-[color:var(--ouro)]/10">
+            <span class="mono text-[.62rem] tracking-[.22em] t-ouro">PEDIDO SIMULADO · #ART-2026-084</span>
+            <h3 class="serif font-bold text-3xl mt-2">Aquisição Registrada</h3>
+            <p class="text-sm claro-70 font-light mt-2 leading-relaxed">Esta tela demonstra o pós-compra do colecionador na <strong>Artheiros</strong>.</p>
+          </div>
+
+          <div class="space-y-3 text-xs border-t border-white/10 pt-4">
+            <div class="flex justify-between"><span class="claro-70">Obra:</span><strong class="text-right">${esc(o.titulo)}</strong></div>
+            <div class="flex justify-between"><span class="claro-70">Artista:</span><span>${esc(a.nome)} (${esc(a.cidade)})</span></div>
+            <div class="flex justify-between"><span class="claro-70">Modalidade de Envio:</span><span>${esc(freteSel.nome)}</span></div>
+            <div class="flex justify-between"><span class="claro-70">Total:</span><strong class="t-ouro mono">${fmtBRL(totalGeral)}</strong></div>
+          </div>
+
+          <div class="p-4 rounded border border-white/15 bg-white/[0.03] space-y-2">
+            <p class="mono text-[.62rem] tracking-[.18em] t-ouro">ACOMPANHAMENTO & RASTREAMENTO</p>
+            <p class="text-xs claro-70 leading-relaxed">• <strong>Status atual:</strong> Artista notificado para preparar a embalagem museológica e o certificado assinado.</p>
+            <div class="mt-2 p-2.5 rounded bg-black/40 border border-white/10 flex items-center justify-between mono text-[.68rem]">
+              <span class="claro-70">CÓDIGO DE RASTREIO:</span>
+              <span class="t-ouro">AGUARDANDO POSTAGEM</span>
+            </div>
+          </div>
+
+          <button type="button" id="chk-done-close" class="btn btn-ouro w-full justify-center">Voltar à Exposição</button>
+        </div>`;
+    }
+  }
+
+  function openCheckout(id, resetStep=true){
+    if(id){
+      chkState.obraId = id;
+      $('#bag-count').textContent = '1';
+      if(resetStep){
+        chkState.step = 1;
+        chkState.pixCopiado = false;
+        chkState.boletoGerado = false;
+      }
+    }
+    renderCheckout();
+    chkDrawer.classList.add('open');
+    chkBg.classList.add('open');
+    chkDrawer.setAttribute('aria-hidden','false');
+    if(window.lenis && lenis.stop) lenis.stop();
+  }
+
+  function closeCheckout(){
+    chkDrawer.classList.remove('open');
+    chkBg.classList.remove('open');
+    chkDrawer.setAttribute('aria-hidden','true');
+    if(window.lenis && lenis.start && lb.classList.contains('hidden')) lenis.start();
+  }
+
+  $('#bag-btn').addEventListener('click',()=>openCheckout(chkState.obraId, false));
+  $('#checkout-close').addEventListener('click',closeCheckout);
+  chkBg.addEventListener('click',closeCheckout);
+
+  /* Navegação e interações dentro do checkout */
+  chkDrawer.addEventListener('click', e=>{
+    const gotoBtn = e.target.closest('[data-goto-step]');
+    if(gotoBtn && chkState.obraId){
+      chkState.step = Number(gotoBtn.dataset.gotoStep);
+      renderCheckout();
+      chkBody.scrollTop = 0;
+      return;
+    }
+    if(e.target.id === 'chk-to-2'){ chkState.step = 2; renderCheckout(); chkBody.scrollTop = 0; }
+    if(e.target.id === 'chk-to-3'){
+      if(!chkState.freteCalculado) chkState.freteCalculado = true;
+      chkState.step = 3; renderCheckout(); chkBody.scrollTop = 0;
+    }
+    if(e.target.id === 'chk-calc-cep'){
+      const inp = $('#chk-cep');
+      chkState.cep = (inp && inp.value.trim()) ? inp.value.trim() : '88301-000';
+      chkState.freteCalculado = true;
+      renderCheckout();
+    }
+    const freteOpt = e.target.closest('[data-select-frete]');
+    if(freteOpt){
+      chkState.freteId = freteOpt.dataset.selectFrete;
+      renderCheckout();
+    }
+    if(e.target.closest('#chk-toggle-pol')){
+      chkState.politicaAberta = !chkState.politicaAberta;
+      renderCheckout();
+    }
+    const payTab = e.target.closest('[data-pay-tab]');
+    if(payTab){
+      chkState.payMethod = payTab.dataset.payTab;
+      renderCheckout();
+    }
+    if(e.target.id === 'chk-copy-pix'){
+      chkState.pixCopiado = true;
+      renderCheckout();
+    }
+    if(e.target.id === 'chk-gen-boleto'){
+      chkState.boletoGerado = true;
+      renderCheckout();
+    }
+    if(e.target.id === 'chk-confirm'){
+      chkState.step = 4;
+      renderCheckout();
+      chkBody.scrollTop = 0;
+    }
+    if(e.target.id === 'chk-done-close' || e.target.id === 'chk-empty-explore'){
+      closeCheckout();
+    }
+  });
+
+  chkDrawer.addEventListener('input', e=>{
+    if(e.target.id === 'chk-cep'){
+      let v = e.target.value.replace(/\D/g,'').slice(0,8);
+      if(v.length > 5) v = v.slice(0,5)+'-'+v.slice(5);
+      e.target.value = v;
+      chkState.cep = v;
+    }
+  });
+  chkDrawer.addEventListener('change', e=>{
+    if(e.target.id === 'chk-parcelas'){
+      chkState.parcelas = Number(e.target.value);
+    }
+  });
 
   /* ---- ÂNCORAS (compatível com Lenis) ---- */
   document.addEventListener('click',e=>{
@@ -650,7 +1088,7 @@
   });
 
   /* ---- LIGHTBOX ---- */
-  const lb=$('#lb'), stage=$('#lb-stage'), lbImg=$('#lb-img'); let lastFocus=null, closeT=null;
+  const lb=$('#lb'), stage=$('#lb-stage'), lbImg=$('#lb-img'); let lastFocus=null, closeT=null, currentLbId=null;
   const setZoom = on=>{
     stage.classList.toggle('zoomed',on); $('#lb-zoom').setAttribute('aria-pressed',on);
     $('#lb-zoom-label').textContent = on?'Voltar':'Ver textura';
@@ -659,6 +1097,7 @@
   const origin = (x,y)=>{ const r=lbImg.getBoundingClientRect(); lbImg.style.transformOrigin = `${Math.min(100,Math.max(0,(x-r.left)/r.width*100))}% ${Math.min(100,Math.max(0,(y-r.top)/r.height*100))}%`; };
   function openLB(id){
     const o=obra(id); if(!o) return; const a=artista(o.artistaId);
+    currentLbId = o.id;
     clearTimeout(closeT);
     lastFocus=document.activeElement;
     setZoom(false);
@@ -676,15 +1115,24 @@
   }
   function closeLB(){
     lb.classList.remove('on');
-    closeT=setTimeout(()=>{ lb.classList.add('hidden'); document.documentElement.classList.remove('lb-open'); if(window.lenis && lenis.start) lenis.start(); setZoom(false); },430);
+    closeT=setTimeout(()=>{ lb.classList.add('hidden'); document.documentElement.classList.remove('lb-open'); if(window.lenis && lenis.start && !chkDrawer.classList.contains('open')) lenis.start(); setZoom(false); },430);
     if(lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
   }
+  $('#lb-buy').addEventListener('click',()=>{
+    const id = currentLbId;
+    closeLB();
+    setTimeout(()=>openCheckout(id, true), 180);
+  });
   stage.addEventListener('click',e=>{ const on=!stage.classList.contains('zoomed'); if(on) origin(e.clientX,e.clientY); setZoom(on); });
   stage.addEventListener('mousemove',e=>{ if(stage.classList.contains('zoomed')) origin(e.clientX,e.clientY); });
   $('#lb-zoom').addEventListener('click',e=>{ e.stopPropagation(); setZoom(!stage.classList.contains('zoomed')); });
   $('#lb-close').addEventListener('click',closeLB);
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){ if(!lb.classList.contains('hidden')) closeLB(); else if(drawer.classList.contains('open')) setDrawer(false); }
+    if(e.key==='Escape'){
+      if(!lb.classList.contains('hidden')) closeLB();
+      else if(chkDrawer.classList.contains('open')) closeCheckout();
+      else if(drawer.classList.contains('open')) setDrawer(false);
+    }
     if((e.key==='Enter'||e.key===' ') && e.target.matches && e.target.matches('[role="button"][data-open]')){ e.preventDefault(); openLB(e.target.dataset.open); }
     if(e.key==='Tab' && !lb.classList.contains('hidden')){
       const f=$$('button,a[href]',lb).filter(x=>x.offsetParent!==null); if(!f.length) return;
@@ -693,9 +1141,14 @@
       else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
     }
   });
-  document.addEventListener('click',e=>{ const t=e.target.closest('[data-open]'); if(t){ e.preventDefault(); openLB(t.dataset.open); } });
+  document.addEventListener('click',e=>{
+    const buyBtn = e.target.closest('[data-buy]');
+    if(buyBtn){ e.preventDefault(); openCheckout(buyBtn.dataset.buy, true); return; }
+    const t=e.target.closest('[data-open]');
+    if(t){ e.preventDefault(); openLB(t.dataset.open); }
+  });
 
-  /* ---- SPOTLIGHT DA HERO (só transform: compositor, sem repaint) ---- */
+  /* ---- SPOTLIGHT DA HERO ---- */
   const hero=$('#galeria'), spot=$('#spot');
   const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   let HW=1,HH=1;
@@ -732,7 +1185,6 @@
   const CLIP0 = 'inset(100% -80px -100px -80px)';
   const CLIP1 = 'inset(0% -80px -100px -80px)';
 
-  /* Fallback em CSS puro (sem GSAP/ScrollTrigger) */
   function fallback(){
     if(reduce){ return; }
     const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{threshold:.15});
@@ -741,7 +1193,7 @@
       let ticking=false;
       const upd=()=>{
         feats.forEach(f=>{
-          const r=f.getBoundingClientRect(), p=(r.top+r.height/2-innerHeight/2)/innerHeight; // -1..1
+          const r=f.getBoundingClientRect(), p=(r.top+r.height/2-innerHeight/2)/innerHeight;
           f.style.transform=`translate3d(0,${(-p*(+f.dataset.par)).toFixed(1)}px,0)`;
         });
         ticking=false;
@@ -769,7 +1221,6 @@
     try{
       gsap.registerPlugin(ScrollTrigger);
 
-      /* Revelação teatral: abre de baixo para cima + escala 1.08 → 1.0 */
       wraps.forEach(el=>{
         const im = el.querySelector('.art img');
         gsap.set(el,{clipPath:CLIP0});
@@ -779,7 +1230,6 @@
           .to(im,{ scale:1, duration:1.9, ease:'power2.out' },0);
       });
 
-      /* Parallax de parede: assimetria vertical suave no scroll (desktop) */
       const par = ()=>feats.forEach(f=>{
         const s=+f.dataset.par;
         gsap.fromTo(f,{y:s},{ y:-s, ease:'none', scrollTrigger:{ trigger:f, start:'top bottom', end:'bottom top', scrub:true } });
